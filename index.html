@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Analysis SPA</title>
+    <!-- Bootstrap CSS for basic styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Switchery CSS for switch styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .card {
+            margin-bottom: 1rem;
+        }
+
+        .switchery {
+            height: 24px;
+            width: 50px;
+        }
+
+        .switchery>small {
+            height: 24px;
+            width: 24px;
+        }
+
+        .no-icon {
+            border: 0 !important;
+            margin: 1rem auto !important;
+        }
+
+        .swal2-popup {
+            padding: 2rem !important;
+            border-radius: 1rem !important;
+        }
+    </style>
+</head>
+
+<body class="container py-4">
+
+    <!-- Menu Section -->
+    <div id="menuSection">
+        <h2>Welcome to Feedback Analysis</h2>
+        <div class="d-grid gap-2 col-6 mx-auto"></div>
+        <button id="viewCampaignsBtn" class="btn btn-primary btn-lg"><i class="fas fa-list"></i> View
+            Campaigns</button>
+        <button id="createCampaignBtn" class="btn btn-success btn-lg"><i class="fas fa-plus"></i> Create
+            Campaign</button>
+    </div>
+
+    <!-- Campaign List Section -->
+    <div id="campaignListSection" class="hidden">
+        <h2>Campaigns</h2>
+        <table id="campaignTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Active</th>
+                    <th>Multiple Answers</th>
+                    <th>Feedback Count</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button id="backToMenuFromList" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Back to
+            Menu</button>
+    </div>
+
+    <!-- Campaign Creation Section -->
+    <div id="campaignCreationSection" class="hidden">
+        <h2>Create Campaign</h2>
+        <form id="createCampaignForm" class="row g-3 mb-4">
+            <div class="col-md-12 mb-3">
+                <input type="text" class="form-control" id="campaignName" placeholder="Campaign Name" required>
+            </div>
+            <div class="col-md-12 mb-3">
+                <input type="text" class="form-control" id="campaignDescription" placeholder="Campaign Description">
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-check-label"></label>
+                <input type="checkbox" class="form-check-input switchery" id="campaignActive" checked> Active
+                </label>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input switchery" id="multipleAnswers"> Allow multiple
+                    answers
+                </label>
+            </div>
+            <div class="col-md-12 mb-3">
+                <input type="number" class="form-control" id="maxAnswers" placeholder="Max Answers (0 for unlimited)">
+            </div>
+            <div class="col-md-12 mb-3">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Create Campaign</button>
+            </div>
+        </form>
+        <button id="backToMenuFromCreate" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to
+            Menu</button>
+    </div>
+
+    <!-- Campaign Edit Section -->
+    <div id="campaignEditSection" class="hidden">
+        <h2>Edit Campaign</h2>
+        <form id="editCampaignForm" class="row g-3 mb-4">
+            <input type="hidden" id="editCampaignId">
+            <div class="col-md-12 mb-3">
+                <input type="text" class="form-control" id="editCampaignName" placeholder="Campaign Name" required>
+                <div class="invalid-feedback">Campaign name must be between 3 and 255 characters</div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <input type="text" class="form-control" id="editCampaignDescription" placeholder="Campaign Description">
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input switchery" id="editCampaignActive"> Active
+                </label>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input switchery" id="editMultipleAnswers"> Allow
+                    multiple answers
+                </label>
+            </div>
+            <div class="col-md-12 mb-3">
+                <input type="number" class="form-control" id="editMaxAnswers"
+                    placeholder="Max Answers (0 for unlimited)">
+                <div class="invalid-feedback">Max answers cannot be less than current feedback count</div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Update Campaign</button>
+            </div>
+        </form>
+        <button id="backToMenuFromEdit" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to
+            Menu</button>
+    </div>
+
+    <!-- Feedback Creation Section -->
+    <div id="feedbackCreationSection" class="hidden">
+        <h2>Submit Feedback</h2>
+        <div class="mb-3"></div>
+        <textarea id="feedbackMessage" class="form-control" rows="5" placeholder="Your feedback here..."></textarea>
+        <button id="submitFeedbackBtn" class="btn btn-success">Submit Feedback</button>
+    </div>
+
+    <!-- Thank You Section -->
+    <div id="thankYouSection" class="hidden">
+        <h2>Thank You!</h2>
+        <p>Your feedback has been submitted.</p>
+        <button id="returnToCampaigns" class="btn btn-secondary">Return to Campaigns</button>
+    </div>
+
+    <!-- Feedback List Section -->
+    <div id="feedbackListSection" class="hidden">
+        <h2>Feedbacks</h2>
+        <div id="feedbackCards" class="row"></div>
+        <button id="backToCampaigns" class="btn btn-secondary mt-3">Back to Campaigns</button>
+    </div>
+
+    <!-- Switchery JS for switch styling -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script>
+        const apiBase = "http://127.0.0.1:5000/api";
+        let currentCampaignId = null;
+        let currentShortCode = null;
+
+        // Elements
+        const menuSection = document.getElementById("menuSection");
+        const campaignListSection = document.getElementById("campaignListSection");
+        const campaignCreationSection = document.getElementById("campaignCreationSection");
+        const campaignEditSection = document.getElementById("campaignEditSection");
+        const editCampaignForm = document.getElementById("editCampaignForm");
+        const backToMenuFromEdit = document.getElementById("backToMenuFromEdit");
+        const feedbackCreationSection = document.getElementById("feedbackCreationSection");
+        const thankYouSection = document.getElementById("thankYouSection");
+        const feedbackListSection = document.getElementById("feedbackListSection");
+        const campaignTableBody = document.querySelector("#campaignTable tbody");
+        const createCampaignForm = document.getElementById("createCampaignForm");
+        const submitFeedbackBtn = document.getElementById("submitFeedbackBtn");
+        const feedbackMessage = document.getElementById("feedbackMessage");
+        const feedbackCards = document.getElementById("feedbackCards");
+        const returnToCampaignsBtn = document.getElementById("returnToCampaigns");
+        const backToCampaignsBtn = document.getElementById("backToCampaigns");
+        const viewCampaignsBtn = document.getElementById("viewCampaignsBtn");
+        const createCampaignBtn = document.getElementById("createCampaignBtn");
+        const backToMenuFromList = document.getElementById("backToMenuFromList");
+        const backToMenuFromCreate = document.getElementById("backToMenuFromCreate");
+
+        // Initialize Switchery
+        const editSwitches = Array.prototype.slice.call(document.querySelectorAll('.switchery'));
+        let editSwitcheryInstances = [];
+        editSwitches.forEach(function (html) {
+            editSwitcheryInstances.push(new Switchery(html));
+        });
+
+        // Show/Hide Sections
+        function showSection(section) {
+            [menuSection, campaignListSection, campaignCreationSection, campaignEditSection, feedbackCreationSection, thankYouSection, feedbackListSection]
+                .forEach(s => s.classList.add("hidden"));
+            section.classList.remove("hidden");
+        }
+
+        // Initial load
+        async function loadCampaigns() {
+            campaignTableBody.innerHTML = "";
+            const res = await fetch(`${apiBase}/campaigns?offset=0&limit=10`);
+            const data = await res.json();
+            await loadCampaignsTable(data.items, data.total);
+        }
+
+        async function loadCampaignsTable(campaigns, total) {
+            campaigns.forEach(campaign => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${campaign.name}</td>
+            <td>${campaign.description || ""}</td>
+            <td class="text-center">${campaign.active ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
+            <td class="text-center">${campaign.multiple_answers_from_user ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
+            <td class="text-center"><button class="btn btn-sm btn-primary" data-id="${campaign.id}"><i class="fas fa-comments fa-fw"></i> ${campaign.feedback_count}</button></td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-warning" data-id="${campaign.id}"><i class="fas fa-edit fa-fw"></i> Edit</button>
+                <button class="btn btn-sm btn-danger" data-id="${campaign.id}"><i class="fas fa-trash fa-fw"></i> Delete</button>
+            </td>`;
+                campaignTableBody.appendChild(row);
+
+                // View Feedbacks button
+                row.querySelector(".btn-primary").addEventListener("click", () => {
+                    currentCampaignId = campaign.id;
+                    showFeedbackList(campaign.id);
+                });
+
+                // Edit button
+                row.querySelector(".btn-warning").addEventListener("click", () => {
+                    Swal.fire({
+                        iconHtml: '<i class="fas fa-edit fa-2x text-warning"></i>',
+                        title: 'Edit Campaign',
+                        html: `<b>${campaign.name}</b><br>Are you sure you want to edit this campaign?`,
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Edit',
+                        cancelButtonText: 'Cancel',
+                        focusConfirm: false,
+                        customClass: {
+                            icon: 'no-icon',
+                            confirmButton: 'btn btn-warning mx-2',
+                            cancelButton: 'btn btn-secondary mx-2'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            editCampaign(campaign.id);
+                        }
+                    });
+                });
+
+                // Delete button
+                row.querySelector(".btn-danger").addEventListener("click", () => {
+                    Swal.fire({
+                        iconHtml: '<i class="fas fa-trash fa-2x text-danger"></i>',
+                        title: 'Delete Campaign',
+                        html: `<b>Name: ${campaign.name}</b><br><br>This action cannot be undone!`,
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Delete',
+                        cancelButtonText: 'Cancel',
+                        focusConfirm: false,
+                        customClass: {
+                            icon: 'no-icon',
+                            confirmButton: 'btn btn-danger mx-2',
+                            cancelButton: 'btn btn-secondary mx-2'
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            deleteCampaign(campaign.id);
+                        }
+                    });
+                });
+            });
+        }
+
+        // Create new campaign
+        createCampaignForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const bodyObj = {
+                name: document.getElementById("campaignName").value,
+                description: document.getElementById("campaignDescription").value,
+                active: document.getElementById("campaignActive").checked,
+                multiple_answers_from_user: document.getElementById("multipleAnswers").checked,
+                max_answers: parseInt(document.getElementById("maxAnswers").value) || 0
+            };
+            await fetch(`${apiBase}/campaign`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(bodyObj)
+            });
+            createCampaignForm.reset();
+            loadCampaigns();
+            showSection(campaignListSection);
+        });
+
+        editCampaignForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const campaignId = document.getElementById('editCampaignId').value;
+            const name = document.getElementById('editCampaignName').value;
+            const maxAnswers = parseInt(document.getElementById('editMaxAnswers').value) || 0;
+
+            // Validação do nome
+            if (name.length < 3 || name.length > 255) {
+                document.getElementById('editCampaignName').classList.add('is-invalid');
+                return;
+            } else {
+                document.getElementById('editCampaignName').classList.remove('is-invalid');
+            }
+
+            // Validação de max answers
+            try {
+                const res = await fetch(`${apiBase}/campaign/${campaignId}`);
+                const currentCampaign = await res.json();
+
+                if (maxAnswers !== 0 && maxAnswers < currentCampaign.feedback_count) {
+                    document.getElementById('editMaxAnswers').classList.add('is-invalid');
+                    return;
+                } else {
+                    document.getElementById('editMaxAnswers').classList.remove('is-invalid');
+                }
+
+                // Se todas as validações passarem
+                const bodyObj = {
+                    name: name,
+                    description: document.getElementById('editCampaignDescription').value,
+                    active: document.getElementById('editCampaignActive').checked,
+                    multiple_answers_from_user: document.getElementById('editMultipleAnswers').checked,
+                    max_answers: maxAnswers
+                };
+
+                const response = await fetch(`${apiBase}/campaign/${campaignId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyObj)
+                });
+
+                if (response.ok) {
+                    loadCampaigns();
+                    showSection(campaignListSection);
+                }
+            } catch (error) {
+                console.error('Error updating campaign:', error);
+                Swal.fire('Error', 'Failed to update campaign', 'error');
+            }
+        });
+
+        // Show feedback list
+        async function showFeedbackList(campaignId) {
+            feedbackCards.innerHTML = "";
+            const resFeedbacks = await fetch(`${apiBase}/feedbacks?offset=0&limit=10`);
+            const feedbackData = await resFeedbacks.json();
+            const filtered = feedbackData.items.filter(f => f.campaign_id === campaignId);
+
+            if (filtered.length === 0) {
+                feedbackCards.innerHTML = "<p>No feedbacks found.</p>";
+                showSection(feedbackListSection);
+                return;
+            }
+
+            const sentimentColors = {
+                positive: "text-success",
+                neutral: "text-warning",
+                negative: "text-danger"
+            };
+
+            const languageNames = {
+                pt: "Portuguese",
+                en: "English",
+                es: "Spanish",
+                fr: "French",
+                de: "German"
+            };
+
+            filtered.forEach(fdbk => {
+                const card = document.createElement("div");
+                card.className = "card col-md-4";
+                card.innerHTML = `
+          <div class="card-body">
+            <p class="card-text">${fdbk.message}</p>
+            <hr>
+            <button class="btn btn-sm btn-info mb-2"><i class="fas fa-chart-line"></i> Analyze</button>
+            <div class="analysis-result"></div>
+          </div>`;
+                feedbackCards.appendChild(card);
+
+                const analyzeBtn = card.querySelector("button");
+                const resultDiv = card.querySelector(".analysis-result");
+                analyzeBtn.addEventListener("click", async () => {
+                    const analyzeRes = await fetch(`${apiBase}/feedback/analyze`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ feedback_id: fdbk.id })
+                    });
+                    const analyzeData = await analyzeRes.json();
+                    if (analyzeRes.status === 201 || analyzeRes.status === 200) {
+                        const sentimentClass = sentimentColors[analyzeData.sentiment_category] || "text-muted";
+                        const sentimentIcon = analyzeData.sentiment_category === "positive" ? "fa-smile" :
+                            analyzeData.sentiment_category === "neutral" ? "fa-meh" : "fa-frown";
+                        const languageName = languageNames[analyzeData.detected_language] || analyzeData.detected_language;
+
+                        resultDiv.innerHTML = `
+              <hr>
+              <p><i class="fas ${sentimentIcon} ${sentimentClass}"></i> Sentiment: ${analyzeData.sentiment_category}</p>
+              <p>
+            <i class="fas fa-star-half-alt"></i> Score: 
+            <div class="progress">
+              <div class="progress-bar ${analyzeData.sentiment < 0 ? 'bg-danger' : analyzeData.sentiment > 0 ? 'bg-success' : 'bg-warning'}" role="progressbar" style="width: ${Math.abs(analyzeData.sentiment) * 100}%;" aria-valuenow="${analyzeData.sentiment}" aria-valuemin="-1" aria-valuemax="1"></div>
+            </div>
+              </p>
+              <p><i class="fas fa-star"></i> Star Rating: ${'<i class="fas fa-star text-warning"></i>'.repeat(analyzeData.star_rating)}</p>
+              <p><i class="fas fa-language"></i> Language: ${languageName}</p>
+              <canvas id="sentimentChart${fdbk.id}" width="400" height="200"></canvas>
+            `;
+
+                        // Create a chart for sentiment analysis
+                        const ctx = document.getElementById(`sentimentChart${fdbk.id}`).getContext('2d');
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['Positive', 'Neutral', 'Negative'],
+                                datasets: [{
+                                    label: 'Sentiment Analysis',
+                                    data: [analyzeData.positive_score, analyzeData.neutral_score, analyzeData.negative_score],
+                                    backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        resultDiv.innerHTML = "<p><i class='fas fa-exclamation-triangle'></i> Error analyzing feedback.</p>";
+                    }
+                });
+            });
+            showSection(feedbackListSection);
+        }
+
+        // Edit campaign
+        async function editCampaign(campaignId) {
+            try {
+                const res = await fetch(`${apiBase}/campaign/${campaignId}`);
+                const campaign = await res.json();
+
+                // Preencha o formulário de edição
+                document.getElementById('editCampaignId').value = campaignId;
+                document.getElementById('editCampaignName').value = campaign.name;
+                document.getElementById('editCampaignDescription').value = campaign.description;
+                document.getElementById('editCampaignActive').checked = campaign.active;
+                document.getElementById('editMultipleAnswers').checked = campaign.multiple_answers_from_user;
+                document.getElementById('editMaxAnswers').value = campaign.max_answers;
+
+                // Atualize os switches
+                editSwitcheryInstances.forEach(switchery => {
+                    switchery.setPosition();
+                    switchery.handleOnchange(true);
+                });
+
+                showSection(campaignEditSection);
+            } catch (error) {
+                console.error('Error loading campaign:', error);
+            }
+        }
+
+        // Delete campaign
+        async function deleteCampaign(campaignId) {
+            await fetch(`${apiBase}/campaign/${campaignId}`, {
+                method: "DELETE"
+            });
+            loadCampaigns();
+        }
+
+        // Handle short_code in URL
+        function checkShortCode() {
+            const params = new URLSearchParams(window.location.search);
+            const sc = params.get("short_code");
+            if (sc) {
+                currentShortCode = sc;
+                verifyShortCode(sc);
+            }
+        }
+
+        // Verify short_code and show feedback creation
+        async function verifyShortCode(sc) {
+            // We get all campaigns to see which has the matching short_code
+            const res = await fetch(`${apiBase}/campaigns?offset=0&limit=999999`);
+            const data = await res.json();
+            const found = data.items.find(c => c.short_code === sc);
+            if (found) {
+                currentCampaignId = found.id;
+                showSection(feedbackCreationSection);
+            }
+        }
+
+        // Submit feedback
+        submitFeedbackBtn.addEventListener("click", async () => {
+            const bodyObj = {
+                campaign_id: currentCampaignId,
+                message: feedbackMessage.value
+            };
+            const res = await fetch(`${apiBase}/feedback`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(bodyObj)
+            });
+            if (res.status === 201) {
+                feedbackMessage.value = "";
+                showSection(thankYouSection);
+            }
+        });
+
+        // Return to campaigns or back to campaigns
+        returnToCampaignsBtn.addEventListener("click", () => {
+            window.location.search = "";
+            showSection(campaignListSection);
+            loadCampaigns();
+        });
+        backToCampaignsBtn.addEventListener("click", () => {
+            showSection(campaignListSection);
+            loadCampaigns();
+        });
+
+        // Menu buttons
+        viewCampaignsBtn.addEventListener("click", () => {
+            loadCampaigns();
+            showSection(campaignListSection);
+        });
+        createCampaignBtn.addEventListener("click", () => {
+            showSection(campaignCreationSection);
+        });
+        backToMenuFromList.addEventListener("click", () => {
+            showSection(menuSection);
+        });
+        backToMenuFromCreate.addEventListener("click", () => {
+            showSection(menuSection);
+        });
+        backToMenuFromEdit.addEventListener('click', () => {
+            showSection(menuSection);
+        });
+
+        // On load
+        checkShortCode();
+        if (!currentShortCode) {
+            showSection(menuSection);
+        }
+    </script>
+
+    <!-- Add SweetAlert2 JS before closing body -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
