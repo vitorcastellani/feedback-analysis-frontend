@@ -288,28 +288,44 @@
             <td>${campaign.description || ""}</td>
             <td class="text-center">${campaign.active ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
             <td class="text-center">${campaign.multiple_answers_from_user ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
-            <td class="text-center"><button class="btn btn-sm btn-primary" data-id="${campaign.id}"><i class="fas fa-comments fa-fw"></i> ${campaign.feedback_count}</button></td>
+            <td class="text-center"><button class="btn btn-sm btn-primary" data-action="show_feedbacks" data-id="${campaign.id}"><i class="fas fa-comments fa-fw"></i> ${campaign.feedback_count}</button></td>
             <td class="text-center">
-                <button class="btn btn-sm btn-warning" data-id="${campaign.id}"><i class="fas fa-edit fa-fw"></i> Edit</button>
-                <button class="btn btn-sm btn-danger" data-id="${campaign.id}"><i class="fas fa-trash fa-fw"></i> Delete</button>
+                <button class="btn btn-sm btn-success" data-action="copy_shortcode" data-shortcode="${campaign.short_code}"><i class="fas fa-link fa-fw"></i> Link</button>
+                <button class="btn btn-sm btn-warning" data-action="edit_campaign" data-id="${campaign.id}"><i class="fas fa-edit fa-fw"></i> Edit</button>
+                <button class="btn btn-sm btn-danger" data-action="delete_campaign" data-id="${campaign.id}"><i class="fas fa-trash fa-fw"></i> Delete</button>
             </td>`;
                 campaignTableBody.appendChild(row);
 
+                // Copy Campaign URL to clipboard
+                row.querySelector("[data-action=copy_shortcode]").addEventListener("click", (e) => {
+                    const shortCode = e.target.getAttribute("data-shortcode");
+                    const origin = window.location.href.split('/').slice(0, -1).join('/') + '/' + 'index.html';
+                    navigator.clipboard.writeText(`${origin}?s=${shortCode}`);
+                    Swal.fire({
+                        iconHtml: '<i class="fas fa-link text-success"></i>',
+                        title: 'Campaign URL Copied',
+                        text: 'The campaign URL has been copied to your clipboard.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                });
+
                 // View Feedbacks button
-                row.querySelector(".btn-primary").addEventListener("click", () => {
+                row.querySelector("[data-action=show_feedbacks]").addEventListener("click", () => {
                     currentCampaignId = campaign.id;
                     showFeedbackList(campaign.id);
                 });
 
                 // Edit button
-                row.querySelector(".btn-warning").addEventListener("click", () => {
+                row.querySelector("[data-action=edit_campaign]").addEventListener("click", () => {
                     editCampaign(campaign.id);
                 });
 
                 // Delete button
-                row.querySelector(".btn-danger").addEventListener("click", () => {
+                row.querySelector("[data-action=delete_campaign]").addEventListener("click", () => {
                     Swal.fire({
-                        iconHtml: '<i class="fas fa-trash fa-2x text-danger"></i>',
+                        iconHtml: '<i class="fas fa-trash text-danger"></i>',
                         title: 'Delete Campaign',
                         html: `<b>Name: ${campaign.name}</b><br><br>This action cannot be undone!`,
                         showCancelButton: true,
@@ -355,7 +371,7 @@
             e.preventDefault();
 
             Swal.fire({
-                iconHtml: '<i class="fas fa-save fa-2x text-warning"></i>',
+                iconHtml: '<i class="fas fa-save text-warning"></i>',
                 title: 'Update Campaign',
                 text: 'Are you sure you want to update this campaign?',
                 showCancelButton: true,
@@ -440,7 +456,7 @@
 
             const sentimentColors = {
                 positive: "text-success",
-                neutral: "text-warning",
+                neutral: "text-muted",
                 negative: "text-danger"
             };
 
@@ -454,7 +470,7 @@
 
             filtered.forEach(fdbk => {
                 const card = document.createElement("div");
-                card.className = "card col-md-4";
+                card.className = "card col-md-5 offset-md-1";
                 card.innerHTML = `
           <div class="card-body">
             <p class="card-text">${fdbk.message}</p>
@@ -475,20 +491,17 @@
                     const analyzeData = await analyzeRes.json();
                     if (analyzeRes.status === 201 || analyzeRes.status === 200) {
                         const sentimentClass = sentimentColors[analyzeData.sentiment_category] || "text-muted";
-                        const sentimentIcon = analyzeData.sentiment_category === "positive" ? "fa-smile" :
-                            analyzeData.sentiment_category === "neutral" ? "fa-meh" : "fa-frown";
                         const languageName = languageNames[analyzeData.detected_language] || analyzeData.detected_language;
 
                         resultDiv.innerHTML = `
               <hr>
-              <p><i class="fas ${sentimentIcon} ${sentimentClass}"></i> Sentiment: ${analyzeData.sentiment_category}</p>
+              <p class="${sentimentClass} text-capitalize d-flex justify-content-between">${analyzeData.sentiment_category} <span>${'<i class="fas fa-star text-warning"></i>'.repeat(analyzeData.star_rating)}</span></p>
               <p>
-            <i class="fas fa-star-half-alt"></i> Score: 
-            <div class="progress">
-              <div class="progress-bar ${analyzeData.sentiment < 0 ? 'bg-danger' : analyzeData.sentiment > 0 ? 'bg-success' : 'bg-warning'}" role="progressbar" style="width: ${Math.abs(analyzeData.sentiment) * 100}%;" aria-valuenow="${analyzeData.sentiment}" aria-valuemin="-1" aria-valuemax="1"></div>
+            <div class="progress position-relative" style="height: 30px;">
+              <div class="progress-bar ${analyzeData.sentiment < 0 ? 'bg-danger' : analyzeData.sentiment > 0 ? 'bg-success' : 'bg-warning'}" role="progressbar" style="width: ${Math.round((analyzeData.sentiment < 0 ? analyzeData.sentiment * -1 : analyzeData.sentiment) * 100)}%;" aria-valuenow="${analyzeData.sentiment}" aria-valuemin="-1" aria-valuemax="1"></div>
+              <span class="position-absolute w-100 text-center text-muted d-flex align-items-center justify-content-center" style="top: 0; bottom: 0;">${Math.round((analyzeData.sentiment < 0 ? analyzeData.sentiment * -1 : analyzeData.sentiment) * 100)}%</span>
             </div>
               </p>
-              <p><i class="fas fa-star"></i> Star Rating: ${'<i class="fas fa-star text-warning"></i>'.repeat(analyzeData.star_rating)}</p>
               <p><i class="fas fa-language"></i> Language: ${languageName}</p>
               <canvas id="sentimentChart${fdbk.id}" width="400" height="200"></canvas>
             `;
@@ -558,7 +571,7 @@
         // Handle short_code in URL
         function checkShortCode() {
             const params = new URLSearchParams(window.location.search);
-            const sc = params.get("short_code");
+            const sc = params.get("s");
             if (sc) {
                 currentShortCode = sc;
                 verifyShortCode(sc);
@@ -568,7 +581,7 @@
         // Verify short_code and show feedback creation
         async function verifyShortCode(sc) {
             // We get all campaigns to see which has the matching short_code
-            const res = await fetch(`${apiBase}/campaigns?offset=0&limit=999999`);
+            const res = await fetch(`${apiBase}/campaigns?offset=0&limit=1`);
             const data = await res.json();
             const found = data.items.find(c => c.short_code === sc);
             if (found) {
