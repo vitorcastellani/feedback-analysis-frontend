@@ -72,24 +72,102 @@
             padding: 2rem !important;
             border-radius: 1rem !important;
         }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .cursor-help {
+            cursor: help;
+        }
     </style>
 </head>
 
-<body class="container py-4">
-
+<body class="container-fluid px-5 py-3"></body>
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay hidden">
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- Menu Section -->
+    <!-- Unified Menu Section -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+            <a id="homeButton" class="navbar-brand" href="#">
+                <img src="static/images/wave-logo.webp" alt="WAVE" width="30" height="30"
+                    class="d-inline-block align-text-top">
+                WAVE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Section -->
     <div id="menuSection" data-title="Menu">
-        <h2>Welcome to Feedback Analysis</h2>
-        <div class="d-grid gap-2 col-6 mx-auto"></div>
-        <button id="viewCampaignsBtn" class="btn btn-primary btn-lg"><i class="fas fa-list"></i> View
-            Campaigns</button>
-        <button id="createCampaignBtn" class="btn btn-success btn-lg"><i class="fas fa-plus"></i> Create
-            Campaign</button>
+        <div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Dashboard Metrics</h5>
+                        <div id="dashboardMetrics" class="row text-center">
+                            <div id="connectWithBackendToLoadDashboard" class="col-md-12" hidden>
+                                <p class="text-danger">Please connect to the backend service to load dashboard data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card clickable-card cursor-pointer" id="viewCampaignsBtn">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-list fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">View Campaigns</h5>
+                        <p class="card-text">Browse and manage your campaigns.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card clickable-card cursor-pointer" id="createCampaignBtn">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-bullhorn fa-3x text-success"></i>
+                        </div>
+                        <h5 class="card-title">Create Campaign</h5>
+                        <p class="card-text">Start a new campaign to collect feedback.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card clickable-card cursor-pointer" id="viewDashboardsBtn">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-chart-bar fa-3x text-info"></i>
+                        </div>
+                        <h5 class="card-title">View Dashboards</h5>
+                        <p class="card-text">Browse and analyze your custom dashboards.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card clickable-card cursor-pointer" id="createDashboardBtn">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-chart-pie fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="card-title">Create Dashboard</h5>
+                        <p class="card-text">Design a custom dashboard to visualize campaign data.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Campaign List Section -->
@@ -100,10 +178,26 @@
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>Active</th>
-                    <th>Multiple Answers</th>
-                    <th>Feedback Count</th>
-                    <th>Actions</th>
+                    <th class="text-center">
+                        Status
+                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Active campaigns can receive feedback. Inactive campaigns are not accepting responses."></i>
+                    </th>
+                    <th class="text-center">
+                        Multi-Answers
+                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Allows multiple answers from the same user. If disabled, only one response per IP is accepted."></i>
+                    </th>
+                    <th class="text-center">
+                        Max Answers
+                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="When the maximum number of responses is reached, the campaign will no longer accept new feedbacks."></i>
+                    </th>
+                    <th class="text-center">Feedbacks</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -202,6 +296,27 @@
         <button id="backToCampaigns" class="btn btn-secondary mt-3">Back to Campaigns</button>
     </div>
 
+    <footer class="text-center py-3 shadow-sm fixed-bottom" style="background-color: #f8f9fa; color: #6c757d;">
+        <p class="mb-0">
+            Developed by
+            <a href="https://github.com/vitorcastellani" target="_blank"
+                class="text-primary text-decoration-none fw-bold">
+                Vitor Castellani <i class="fab fa-github"></i>
+            </a> |
+            <a href="https://www.linkedin.com/in/vitorcastellani/" target="_blank"
+                class="text-primary text-decoration-none fw-bold">
+                LinkedIn <i class="fab fa-linkedin"></i>
+            </a>
+        </p>
+        <p class="mb-0">
+            This project is the MVP of the "Full Stack Basic Development" sprint in the Software Engineering
+            postgraduate program at PUC-Rio.
+        </p>
+    </footer>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <!-- Switchery JS for switch styling -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
     <!-- Chart.js for data visualization -->
@@ -210,6 +325,14 @@
         const apiBase = "http://127.0.0.1:5000/api";
         let currentCampaignId = null;
         let currentShortCode = null;
+
+        // Initialize Bootstrap tooltips
+        document.addEventListener('DOMContentLoaded', function () {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
 
         // Elements
         const menuSection = document.getElementById("menuSection");
@@ -232,6 +355,7 @@
         const createCampaignBtn = document.getElementById("createCampaignBtn");
         const backToMenuFromList = document.getElementById("backToMenuFromList");
         const backToMenuFromCreate = document.getElementById("backToMenuFromCreate");
+        const homeButton = document.getElementById("homeButton");
 
         const loadingOverlay = document.getElementById("loadingOverlay");
 
@@ -270,6 +394,9 @@
             [menuSection, campaignListSection, campaignCreationSection, campaignEditSection, feedbackCreationSection, thankYouSection, feedbackListSection]
                 .forEach(s => s.classList.add("hidden"));
             section.classList.remove("hidden");
+            if (section === menuSection) {
+                loadDashboardMetrics();
+            }
         }
 
         // Initial load
@@ -283,11 +410,25 @@
         async function loadCampaignsTable(campaigns, total) {
             campaigns.forEach(campaign => {
                 const row = document.createElement("tr");
+                row.classList.add("align-middle");
                 row.innerHTML = `
             <td>${campaign.name}</td>
             <td>${campaign.description || ""}</td>
-            <td class="text-center">${campaign.active ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
-            <td class="text-center">${campaign.multiple_answers_from_user ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
+            <td class="text-center">
+                ${campaign.active
+                        ? '<span class="badge bg-success cursor-help" data-bs-toggle="tooltip" title="This campaign is active and can receive responses."><i class="fas fa-check-circle"></i> Active</span>'
+                        : '<span class="badge bg-danger cursor-help" data-bs-toggle="tooltip" title="This campaign is inactive and cannot receive responses."><i class="fas fa-times-circle"></i> Inactive</span>'}
+            </td>
+            <td class="text-center">
+                ${campaign.multiple_answers_from_user
+                        ? '<span class="badge bg-success cursor-help" data-bs-toggle="tooltip" title="Multiple answers are allowed without verifying identity."><i class="fas fa-user-check"></i> Allowed</span>'
+                        : '<span class="badge bg-danger cursor-help" data-bs-toggle="tooltip" title="Restricts to one answer per user by verifying identity using IP."><i class="fas fa-user-shield"></i> Restricted</span>'}
+            </td>
+            <td class="text-center">
+                ${campaign.max_answers 
+                    ? campaign.max_answers 
+                    : '<span class="badge bg-success">Unlimited</span>'}
+            </td>
             <td class="text-center"><button class="btn btn-sm btn-primary" data-action="show_feedbacks" data-id="${campaign.id}"><i class="fas fa-comments fa-fw"></i> ${campaign.feedback_count}</button></td>
             <td class="text-center">
                 <button class="btn btn-sm btn-success" data-action="copy_shortcode" data-shortcode="${campaign.short_code}"><i class="fas fa-link fa-fw"></i> Link</button>
@@ -295,6 +436,11 @@
                 <button class="btn btn-sm btn-danger" data-action="delete_campaign" data-id="${campaign.id}"><i class="fas fa-trash fa-fw"></i> Delete</button>
             </td>`;
                 campaignTableBody.appendChild(row);
+
+                const tooltipTriggerList = [].slice.call(row.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                    new bootstrap.Tooltip(tooltipTriggerEl);
+                });
 
                 // Copy Campaign URL to clipboard
                 row.querySelector("[data-action=copy_shortcode]").addEventListener("click", (e) => {
@@ -323,7 +469,8 @@
                 });
 
                 // Delete button
-                row.querySelector("[data-action=delete_campaign]").addEventListener("click", () => {
+                row.querySelector("[data-action=delete_campaign]").addEventListener("click", function () {
+                    const campaignId = campaign.id;
                     Swal.fire({
                         iconHtml: '<i class="fas fa-trash text-danger"></i>',
                         title: 'Delete Campaign',
@@ -340,7 +487,7 @@
                         buttonsStyling: false
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            deleteCampaign(campaign.id);
+                            deleteCampaign(campaignId);
                         }
                     });
                 });
@@ -396,7 +543,7 @@
             const name = document.getElementById('editCampaignName').value;
             const maxAnswers = parseInt(document.getElementById('editMaxAnswers').value) || 0;
 
-            // Validação do nome
+            // Name validation
             if (name.length < 3 || name.length > 255) {
                 document.getElementById('editCampaignName').classList.add('is-invalid');
                 return;
@@ -404,7 +551,7 @@
                 document.getElementById('editCampaignName').classList.remove('is-invalid');
             }
 
-            // Validação de max answers
+            // Max Answers validation
             try {
                 const res = await fetch(`${apiBase}/campaign/${campaignId}`);
                 const currentCampaign = await res.json();
@@ -416,7 +563,7 @@
                     document.getElementById('editMaxAnswers').classList.remove('is-invalid');
                 }
 
-                // Se todas as validações passarem
+                // If all validations pass, update the campaign
                 const bodyObj = {
                     name: name,
                     description: document.getElementById('editCampaignDescription').value,
@@ -540,7 +687,7 @@
                 const res = await fetch(`${apiBase}/campaign/${campaignId}`);
                 const campaign = await res.json();
 
-                // Preencha o formulário de edição
+                // Fill the form
                 document.getElementById('editCampaignId').value = campaignId;
                 document.getElementById('editCampaignName').value = campaign.name;
                 document.getElementById('editCampaignDescription').value = campaign.description;
@@ -548,7 +695,7 @@
                 document.getElementById('editMultipleAnswers').checked = campaign.multiple_answers_from_user;
                 document.getElementById('editMaxAnswers').value = campaign.max_answers;
 
-                // Atualize os switches
+                // Update switchery instances
                 editSwitcheryInstances.forEach(switchery => {
                     switchery.setPosition();
                     switchery.handleOnchange(true);
@@ -580,13 +727,16 @@
 
         // Verify short_code and show feedback creation
         async function verifyShortCode(sc) {
-            // We get all campaigns to see which has the matching short_code
-            const res = await fetch(`${apiBase}/campaigns?offset=0&limit=1`);
-            const data = await res.json();
-            const found = data.items.find(c => c.short_code === sc);
-            if (found) {
-                currentCampaignId = found.id;
+            // We get the campaign that matches the short_code
+            const res = await fetch(`${apiBase}/campaign/short_code/${sc}`);
+
+            if (res.ok) {
+                const data = await res.json();
+                currentCampaignId = data.id;
                 showSection(feedbackCreationSection);
+            }
+            else {
+                Swal.fire('Error', 'Failed to verify short code', 'error');
             }
         }
 
@@ -605,6 +755,10 @@
                 feedbackMessage.value = "";
                 showSection(thankYouSection);
             }
+        });
+
+        homeButton.addEventListener("click", () => {
+            showSection(menuSection);
         });
 
         // Return to campaigns or back to campaigns
@@ -635,6 +789,33 @@
         backToMenuFromEdit.addEventListener('click', () => {
             showSection(menuSection);
         });
+
+        async function loadDashboardMetrics() {
+            try {
+                const res = await fetch(`${apiBase}/dashboard-metrics`);
+
+                if (!res.ok)
+                    document.getElementById("connectWithBackendToLoadDashboard").removeAttribute("hidden");
+
+                const data = await res.json();
+                document.getElementById("dashboardMetrics").innerHTML = `
+                <div class="col-md-4">
+                    <h6>Total Campaigns</h6>
+                    <p id="totalCampaigns" class="display-6 text-primary">${data.total_campaigns || 0}</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Total Feedbacks</h6>
+                    <p id="totalFeedbacks" class="display-6 text-success">${data.total_feedbacks || 0}</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Active Campaigns</h6>
+                    <p id="activeCampaigns" class="display-6 text-warning">${data.active_campaigns || 0}</p>
+                </div>
+                `;
+            } catch (error) {
+                document.getElementById("connectWithBackendToLoadDashboard").removeAttribute("hidden");
+            }
+        }
 
         // On load
         checkShortCode();
