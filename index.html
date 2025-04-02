@@ -13,10 +13,37 @@
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
+        /* General Styles */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            flex: 1;
+        }
+
+        #mainContent {
+            flex: 1;
+            padding-bottom: 1rem;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
         .hidden {
             display: none !important;
         }
 
+        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -49,10 +76,16 @@
             }
         }
 
+        /* Card Styles */
         .card {
             margin-bottom: 1rem;
         }
 
+        .clickable-card {
+            cursor: pointer;
+        }
+
+        /* Switchery Styles */
         .switchery {
             height: 24px;
             width: 50px;
@@ -63,6 +96,7 @@
             width: 24px;
         }
 
+        /* SweetAlert2 Customization */
         .no-icon {
             border: 0 !important;
             margin: 1rem auto !important;
@@ -73,6 +107,7 @@
             border-radius: 1rem !important;
         }
 
+        /* Cursor Styles */
         .cursor-pointer {
             cursor: pointer;
         }
@@ -80,37 +115,151 @@
         .cursor-help {
             cursor: help;
         }
+
+        /* Hover Effects */
+        .hover-highlight:hover {
+            background-color: #bedfff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand i {
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #0d6efd;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+
+        .dropdown-menu {
+            border-radius: 0.5rem;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        /* Responsive Styles */
+        .d-none.d-md-inline {
+            display: none !important;
+        }
+
+        @media (min-width: 768px) {
+            .d-none.d-md-inline {
+                display: inline !important;
+            }
+        }
     </style>
 </head>
 
 <body class="container-fluid px-5 py-3"></body>
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
-        <div class="loading-spinner"></div>
-    </div>
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="loading-spinner"></div>
+</div>
 
+<!-- Main Content -->
+<div id="mainContent">
     <!-- Unified Menu Section -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
         <div class="container-fluid">
-            <a id="homeButton" class="navbar-brand" href="#">
-                <img src="static/images/wave-logo.webp" alt="WAVE" width="30" height="30"
-                    class="d-inline-block align-text-top">
-                WAVE
+            <a class="navbar-brand fw-bold text-primary" href="#" onclick="showSection(menuSection)">
+                <i class="fas fa-wave-square me-2"></i>WAVE
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <hr class="w-100 my-2 d-lg-none"> <!-- Separador antes do menu em telas pequenas -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark fw-semibold hover-highlight" href="#"
+                            id="dashboardMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-chart-pie me-2"></i>Dashboards
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dashboardMenu">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#"
+                                    onclick="showSection(menuSection)">
+                                    <i class="fas fa-eye me-2"></i><span class="d-none d-md-inline">View</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#"
+                                    onclick="showSection(menuSection)">
+                                    <i class="fas fa-plus me-2"></i><span class="d-none d-md-inline">Create</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark fw-semibold hover-highlight" href="#"
+                            id="campaignsMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bullhorn me-2"></i>Campaigns
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="campaignsMenu">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#"
+                                    onclick="loadCampaigns(); showSection(campaignListSection);">
+                                    <i class="fas fa-eye me-2"></i><span class="d-none d-md-inline">View</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#"
+                                    onclick="showSection(campaignCreationSection)">
+                                    <i class="fas fa-plus me-2"></i><span class="d-none d-md-inline">Create</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <!-- Main Content Section -->
     <div id="menuSection" data-title="Menu">
-        <div>
+        <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Dashboard Metrics</h5>
+                        <h5 class="card-title">Overview</h5>
                         <div id="dashboardMetrics" class="row text-center">
                             <div id="connectWithBackendToLoadDashboard" class="col-md-12" hidden>
                                 <p class="text-danger">Please connect to the backend service to load dashboard data.</p>
@@ -120,50 +269,26 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card clickable-card cursor-pointer" id="viewCampaignsBtn">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="fas fa-list fa-3x text-primary"></i>
-                        </div>
-                        <h5 class="card-title">View Campaigns</h5>
-                        <p class="card-text">Browse and manage your campaigns.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card clickable-card cursor-pointer" id="createCampaignBtn">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="fas fa-bullhorn fa-3x text-success"></i>
-                        </div>
-                        <h5 class="card-title">Create Campaign</h5>
-                        <p class="card-text">Start a new campaign to collect feedback.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row mt-4">
             <div class="col-md-6">
-                <div class="card clickable-card cursor-pointer" id="viewDashboardsBtn">
+                <div class="card clickable-card cursor-pointer" id="manageDashboardsBtn">
                     <div class="card-body text-center">
                         <div class="mb-3">
-                            <i class="fas fa-chart-bar fa-3x text-info"></i>
+                            <i class="fas fa-chart-pie fa-3x text-info"></i>
                         </div>
-                        <h5 class="card-title">View Dashboards</h5>
+                        <h5 class="card-title">Manage Dashboards</h5>
                         <p class="card-text">Browse and analyze your custom dashboards.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card clickable-card cursor-pointer" id="createDashboardBtn">
+                <div class="card clickable-card cursor-pointer" id="viewCampaignsBtn">
                     <div class="card-body text-center">
                         <div class="mb-3">
-                            <i class="fas fa-chart-pie fa-3x text-warning"></i>
+                            <i class="fas fa-bullhorn fa-3x text-primary"></i>
                         </div>
-                        <h5 class="card-title">Create Dashboard</h5>
-                        <p class="card-text">Design a custom dashboard to visualize campaign data.</p>
+                        <h5 class="card-title">Manage Campaigns</h5>
+                        <p class="card-text">Browse and manage your campaigns.</p>
                     </div>
                 </div>
             </div>
@@ -171,107 +296,208 @@
     </div>
 
     <!-- Campaign List Section -->
-    <div id="campaignListSection" data-title="Campaigns" class="hidden">
-        <h2>Campaigns</h2>
-        <table id="campaignTable" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th class="text-center">
-                        Status
-                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="Active campaigns can receive feedback. Inactive campaigns are not accepting responses."></i>
-                    </th>
-                    <th class="text-center">
-                        Multi-Answers
-                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="Allows multiple answers from the same user. If disabled, only one response per IP is accepted."></i>
-                    </th>
-                    <th class="text-center">
-                        Max Answers
-                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="When the maximum number of responses is reached, the campaign will no longer accept new feedbacks."></i>
-                    </th>
-                    <th class="text-center">Feedbacks</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button id="backToMenuFromList" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Back to
-            Menu</button>
+    <div id="campaignListSection" data-title="Campaigns" class="hidden col-xl-10 offset-xl-1 col-lg-12 col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="mb-3 text-center">
+                    <i class="fas fa-list-alt fa-3x text-primary"></i>
+                </div>
+                <h2 class="mb-5 text-center">Campaigns</h2>
+                <div class="d-flex justify-content-end mb-3">
+                    <button id="addNewCampaignBtn" class="btn btn-primary d-flex align-items-center"
+                        onclick="showSection(campaignCreationSection)">
+                        <i class="fas fa-plus me-2"></i> Add New Campaign
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="campaignTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th class="text-center">
+                                    Status
+                                    <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Active campaigns can receive feedback. Inactive campaigns are not accepting responses."></i>
+                                </th>
+                                <th class="text-center">
+                                    Multi-Answers
+                                    <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Allows multiple answers from the same user. If disabled, only one response per IP is accepted."></i>
+                                </th>
+                                <th class="text-center">
+                                    Max Answers
+                                    <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="When the maximum number of responses is reached, the campaign will no longer accept new feedbacks."></i>
+                                </th>
+                                <th class="text-center">Feedbacks</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <button id="backToMenuFromList" class="btn btn-secondary d-flex align-items-center">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Menu
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Campaign Creation Section -->
-    <div id="campaignCreationSection" data-title="Create Campaign" class="hidden">
-        <h2>Create Campaign</h2>
-        <form id="createCampaignForm" class="row g-3 mb-4">
-            <div class="col-md-12 mb-3">
-                <input type="text" class="form-control" id="campaignName" placeholder="Campaign Name" required>
+    <div id="campaignCreationSection" data-title="Create Campaign"
+        class="hidden col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="mb-3 text-center">
+                    <i class="fas fa-plus-circle fa-3x text-success"></i>
+                </div>
+                <h2 class="mb-5 text-center">Campaign</h2>
+                <form id="createCampaignForm" class="row g-3">
+                    <div class="row mb-3">
+                        <label for="campaignName" class="form-label">
+                            <i class="fas fa-tag fa-fw text-muted"></i> Campaign Name
+                        </label>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="campaignName"
+                                placeholder="The name of the campaign" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="campaignDescription" class="form-label">
+                            <i class="fas fa-info-circle fa-fw text-muted"></i> Campaign Description
+                        </label>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="campaignDescription"
+                                placeholder="A brief description of the campaign">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex align-items-center">
+                            <input type="checkbox" class="form-check-input switchery" id="campaignActive" checked>
+                            <span class="m-1">Active</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex align-items-center">
+                            <input type="checkbox" class="form-check-input switchery" id="multipleAnswers">
+                            <span class="m-1">Allow multiple answers</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="maxAnswers" class="form-label">
+                            <i class="fas fa-clipboard-list fa-fw text-muted"></i> Max Answers
+                        </label>
+                        <div class="col-md-12 d-flex align-items-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="maxAnswers" placeholder="Limit responses"
+                                    data-original-placeholder="Limit responses" min="1">
+                                <span class="input-group-text">
+                                    <label class="form-check-label d-flex align-items-center mb-0">
+                                        <input type="checkbox" class="form-check-input switchery me-2"
+                                            id="unlimitedAnswers">
+                                        <span class="text-muted m-1">Unlimited</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 d-flex justify-content-between align-items-center">
+                            <button type="button" id="backToCampaignsFromCreate"
+                                class="btn btn-secondary d-flex align-items-center">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Campaigns
+                            </button>
+                            <button type="submit" class="btn btn-primary d-flex align-items-center">
+                                <i class="fas fa-save me-2"></i> Create Campaign
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-12 mb-3">
-                <input type="text" class="form-control" id="campaignDescription" placeholder="Campaign Description">
-            </div>
-            <div class="col-md-12 mb-3">
-                <label class="form-check-label"></label>
-                <input type="checkbox" class="form-check-input switchery" id="campaignActive" checked> Active
-                </label>
-            </div>
-            <div class="col-md-12 mb-3">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input switchery" id="multipleAnswers"> Allow multiple
-                    answers
-                </label>
-            </div>
-            <div class="col-md-12 mb-3">
-                <input type="number" class="form-control" id="maxAnswers" placeholder="Max Answers (0 for unlimited)">
-            </div>
-            <div class="col-md-12 mb-3">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Create Campaign</button>
-            </div>
-        </form>
-        <button id="backToMenuFromCreate" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to
-            Menu</button>
+        </div>
     </div>
 
     <!-- Campaign Edit Section -->
-    <div id="campaignEditSection" data-title="Edit Campaign" class="hidden">
-        <h2>Edit Campaign</h2>
-        <form id="editCampaignForm" class="row g-3 mb-4">
-            <input type="hidden" id="editCampaignId">
-            <div class="col-md-12 mb-3">
-                <input type="text" class="form-control" id="editCampaignName" placeholder="Campaign Name" required>
-                <div class="invalid-feedback">Campaign name must be between 3 and 255 characters</div>
+    <div id="campaignEditSection" data-title="Edit Campaign"
+        class="hidden col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="mb-3 text-center">
+                    <i class="fas fa-edit fa-3x text-warning"></i>
+                </div>
+                <h2 class="mb-5 text-center">Campaign</h2>
+                <form id="editCampaignForm" class="row g-3">
+                    <input type="hidden" id="editCampaignId">
+                    <div class="row mb-3">
+                        <label for="editCampaignName" class="form-label">
+                            <i class="fas fa-tag fa-fw text-muted"></i> Campaign Name
+                        </label>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="editCampaignName" placeholder="Campaign Name"
+                                required>
+                            <div class="invalid-feedback">Campaign name must be between 3 and 255 characters</div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="editCampaignDescription" class="form-label">
+                            <i class="fas fa-info-circle fa-fw text-muted"></i> Campaign Description
+                        </label>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="editCampaignDescription"
+                                placeholder="Campaign Description">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex align-items-center">
+                            <input type="checkbox" class="form-check-input switchery" id="editCampaignActive">
+                            <span class="m-1">Active</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex align-items-center">
+                            <input type="checkbox" class="form-check-input switchery" id="editMultipleAnswers">
+                            <span class="m-1">Allow multiple answers</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="editMaxAnswers" class="form-label">
+                            <i class="fas fa-clipboard-list fa-fw text-muted"></i> Max Answers
+                        </label>
+                        <div class="col-md-12 d-flex align-items-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="editMaxAnswers"
+                                    placeholder="Limit responses" data-original-placeholder="Limit responses" min="1">
+                                <span class="input-group-text">
+                                    <label class="form-check-label d-flex align-items-center mb-0">
+                                        <input type="checkbox" class="form-check-input switchery me-2"
+                                            id="editUnlimitedAnswers">
+                                        <span class="text-muted m-1">Unlimited</span>
+                                    </label>
+                                </span>
+                            </div>
+                            <div class="invalid-feedback">Max answers cannot be less than current feedback count</div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 d-flex justify-content-between align-items-center">
+                            <button type="button" id="backToCampaignsFromEdit"
+                                class="btn btn-secondary d-flex align-items-center">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Menu
+                            </button>
+                            <button type="submit" class="btn btn-warning d-flex align-items-center">
+                                <i class="fas fa-save me-2"></i> Update Campaign
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-12 mb-3">
-                <input type="text" class="form-control" id="editCampaignDescription" placeholder="Campaign Description">
-            </div>
-            <div class="col-md-12 mb-3">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input switchery" id="editCampaignActive"> Active
-                </label>
-            </div>
-            <div class="col-md-12 mb-3">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input switchery" id="editMultipleAnswers"> Allow
-                    multiple answers
-                </label>
-            </div>
-            <div class="col-md-12 mb-3">
-                <input type="number" class="form-control" id="editMaxAnswers"
-                    placeholder="Max Answers (0 for unlimited)">
-                <div class="invalid-feedback">Max answers cannot be less than current feedback count</div>
-            </div>
-            <div class="col-md-12 mb-3">
-                <button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Update Campaign</button>
-            </div>
-        </form>
-        <button id="backToMenuFromEdit" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to
-            Menu</button>
+        </div>
     </div>
 
     <!-- Feedback Creation Section -->
@@ -295,352 +521,377 @@
         <div id="feedbackCards" class="row"></div>
         <button id="backToCampaigns" class="btn btn-secondary mt-3">Back to Campaigns</button>
     </div>
+</div>
 
-    <footer class="text-center py-3 shadow-sm fixed-bottom" style="background-color: #f8f9fa; color: #6c757d;">
-        <p class="mb-0">
-            Developed by
-            <a href="https://github.com/vitorcastellani" target="_blank"
-                class="text-primary text-decoration-none fw-bold">
-                Vitor Castellani <i class="fab fa-github"></i>
-            </a> |
-            <a href="https://www.linkedin.com/in/vitorcastellani/" target="_blank"
-                class="text-primary text-decoration-none fw-bold">
-                LinkedIn <i class="fab fa-linkedin"></i>
-            </a>
-        </p>
-        <p class="mb-0">
-            This project is the MVP of the "Full Stack Basic Development" sprint in the Software Engineering
-            postgraduate program at PUC-Rio.
-        </p>
-    </footer>
+<footer class="text-center py-3 shadow-sm" style="background-color: #f8f9fa; color: #6c757d;">
+    <p class="mb-0">
+        Developed by
+        <a href="https://github.com/vitorcastellani" target="_blank" class="text-primary text-decoration-none fw-bold">
+            Vitor Castellani <i class="fab fa-github"></i>
+        </a> |
+        <a href="https://www.linkedin.com/in/vitorcastellani/" target="_blank"
+            class="text-primary text-decoration-none fw-bold">
+            LinkedIn <i class="fab fa-linkedin"></i>
+        </a>
+    </p>
+    <p class="mb-0">
+        This project is the MVP of the "Full Stack Basic Development" sprint in the Software Engineering
+        postgraduate program at PUC-Rio.
+    </p>
+</footer>
 
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- Switchery JS for switch styling -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+<!-- Chart.js for data visualization -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script>
+    const apiBase = "http://127.0.0.1:5000/api";
+    let currentCampaignId = null;
+    let currentShortCode = null;
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <!-- Switchery JS for switch styling -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
-    <!-- Chart.js for data visualization -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    <script>
-        const apiBase = "http://127.0.0.1:5000/api";
-        let currentCampaignId = null;
-        let currentShortCode = null;
-
-        // Initialize Bootstrap tooltips
-        document.addEventListener('DOMContentLoaded', function () {
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-                new bootstrap.Tooltip(tooltipTriggerEl);
-            });
+    // Initialize Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
         });
+    });
 
-        // Elements
-        const menuSection = document.getElementById("menuSection");
-        const campaignListSection = document.getElementById("campaignListSection");
-        const campaignCreationSection = document.getElementById("campaignCreationSection");
-        const campaignEditSection = document.getElementById("campaignEditSection");
-        const editCampaignForm = document.getElementById("editCampaignForm");
-        const backToMenuFromEdit = document.getElementById("backToMenuFromEdit");
-        const feedbackCreationSection = document.getElementById("feedbackCreationSection");
-        const thankYouSection = document.getElementById("thankYouSection");
-        const feedbackListSection = document.getElementById("feedbackListSection");
-        const campaignTableBody = document.querySelector("#campaignTable tbody");
-        const createCampaignForm = document.getElementById("createCampaignForm");
-        const submitFeedbackBtn = document.getElementById("submitFeedbackBtn");
-        const feedbackMessage = document.getElementById("feedbackMessage");
-        const feedbackCards = document.getElementById("feedbackCards");
-        const returnToCampaignsBtn = document.getElementById("returnToCampaigns");
-        const backToCampaignsBtn = document.getElementById("backToCampaigns");
-        const viewCampaignsBtn = document.getElementById("viewCampaignsBtn");
-        const createCampaignBtn = document.getElementById("createCampaignBtn");
-        const backToMenuFromList = document.getElementById("backToMenuFromList");
-        const backToMenuFromCreate = document.getElementById("backToMenuFromCreate");
-        const homeButton = document.getElementById("homeButton");
+    // Elements
+    const menuSection = document.getElementById("menuSection");
+    const campaignListSection = document.getElementById("campaignListSection");
+    const campaignCreationSection = document.getElementById("campaignCreationSection");
+    const campaignEditSection = document.getElementById("campaignEditSection");
+    const editCampaignForm = document.getElementById("editCampaignForm");
+    const backToCampaignsFromEdit = document.getElementById("backToCampaignsFromEdit");
+    const feedbackCreationSection = document.getElementById("feedbackCreationSection");
+    const thankYouSection = document.getElementById("thankYouSection");
+    const feedbackListSection = document.getElementById("feedbackListSection");
+    const campaignTableBody = document.querySelector("#campaignTable tbody");
+    const createCampaignForm = document.getElementById("createCampaignForm");
+    const submitFeedbackBtn = document.getElementById("submitFeedbackBtn");
+    const feedbackMessage = document.getElementById("feedbackMessage");
+    const feedbackCards = document.getElementById("feedbackCards");
+    const returnToCampaignsBtn = document.getElementById("returnToCampaigns");
+    const backToCampaignsBtn = document.getElementById("backToCampaigns");
+    const viewCampaignsBtn = document.getElementById("viewCampaignsBtn");
+    const backToMenuFromList = document.getElementById("backToMenuFromList");
+    const backToCampaignsFromCreate = document.getElementById("backToCampaignsFromCreate");
+    const unlimitedAnswersCheckbox = document.getElementById("unlimitedAnswers");
+    const maxAnswersInput = document.getElementById("maxAnswers");
+    const editUnlimitedAnswersCheckbox = document.getElementById("editUnlimitedAnswers");
+    const editMaxAnswersInput = document.getElementById("editMaxAnswers");
 
-        const loadingOverlay = document.getElementById("loadingOverlay");
+    const loadingOverlay = document.getElementById("loadingOverlay");
 
-        function showLoading() {
-            loadingOverlay.classList.remove("hidden");
+    function showLoading() {
+        loadingOverlay.classList.remove("hidden");
+    }
+
+    function hideLoading() {
+        loadingOverlay.classList.add("hidden");
+    }
+
+    unlimitedAnswersCheckbox.addEventListener("change", () => {
+        if (unlimitedAnswersCheckbox.checked) {
+            editMaxAnswersInput.value = "";
+            maxAnswersInput.placeholder = "There will be no limit to responses";
+            maxAnswersInput.setAttribute("disabled", "true");
+        } else {
+            maxAnswersInput.placeholder = maxAnswersInput.getAttribute("data-original-placeholder") || "";
+            maxAnswersInput.removeAttribute("disabled");
         }
+    });
 
-        function hideLoading() {
-            loadingOverlay.classList.add("hidden");
+    editUnlimitedAnswersCheckbox.addEventListener("change", () => {
+        if (editUnlimitedAnswersCheckbox.checked) {
+            editMaxAnswersInput.value = "";
+            editMaxAnswersInput.placeholder = "There will be no limit to responses";
+            editMaxAnswersInput.setAttribute("disabled", "true");
+        } else {
+            editMaxAnswersInput.placeholder = editMaxAnswersInput.getAttribute("data-original-placeholder") || "";
+            editMaxAnswersInput.removeAttribute("disabled");
         }
+    });
 
-        const originalFetch = window.fetch;
-        window.fetch = async function (...args) {
-            showLoading();
-            try {
-                const response = await originalFetch(...args);
-                return response;
-            } catch (error) {
-                throw error;
-            } finally {
-                hideLoading();
-            }
-        };
-
-        // Initialize Switchery
-        const editSwitches = Array.prototype.slice.call(document.querySelectorAll('.switchery'));
-        let editSwitcheryInstances = [];
-        editSwitches.forEach(function (html) {
-            editSwitcheryInstances.push(new Switchery(html));
-        });
-
-        // Show/Hide Sections
-        function showSection(section) {
-            // Change Page Title based on section
-            document.title = `${section.getAttribute("data-title")} — WAVE`;
-            [menuSection, campaignListSection, campaignCreationSection, campaignEditSection, feedbackCreationSection, thankYouSection, feedbackListSection]
-                .forEach(s => s.classList.add("hidden"));
-            section.classList.remove("hidden");
-            if (section === menuSection) {
-                loadDashboardMetrics();
-            }
+    const originalFetch = window.fetch;
+    window.fetch = async function (...args) {
+        showLoading();
+        try {
+            const response = await originalFetch(...args);
+            return response;
+        } catch (error) {
+            throw error;
+        } finally {
+            hideLoading();
         }
+    };
 
-        // Initial load
-        async function loadCampaigns() {
-            campaignTableBody.innerHTML = "";
-            const res = await fetch(`${apiBase}/campaigns?offset=0&limit=10`);
-            const data = await res.json();
-            await loadCampaignsTable(data.items, data.total);
+    // Initialize Switchery
+    const editSwitches = Array.prototype.slice.call(document.querySelectorAll('.switchery'));
+    let editSwitcheryInstances = [];
+    editSwitches.forEach(function (html) {
+        editSwitcheryInstances.push(new Switchery(html));
+    });
+
+    // Show/Hide Sections
+    function showSection(section) {
+        // Change Page Title based on section
+        document.title = `${section.getAttribute("data-title")} — WAVE`;
+        [menuSection, campaignListSection, campaignCreationSection, campaignEditSection, feedbackCreationSection, thankYouSection, feedbackListSection]
+            .forEach(s => s.classList.add("hidden"));
+        section.classList.remove("hidden");
+        if (section === menuSection) {
+            loadDashboardMetrics();
         }
+    }
 
-        async function loadCampaignsTable(campaigns, total) {
-            campaigns.forEach(campaign => {
-                const row = document.createElement("tr");
-                row.classList.add("align-middle");
-                row.innerHTML = `
+    // Initial load
+    async function loadCampaigns() {
+        campaignTableBody.innerHTML = "";
+        const res = await fetch(`${apiBase}/campaigns?offset=0&limit=10`);
+        const data = await res.json();
+        await loadCampaignsTable(data.items, data.total);
+    }
+
+    async function loadCampaignsTable(campaigns, total) {
+        campaigns.forEach(campaign => {
+            const row = document.createElement("tr");
+            row.classList.add("align-middle");
+            row.innerHTML = `
             <td>${campaign.name}</td>
             <td>${campaign.description || ""}</td>
             <td class="text-center">
                 ${campaign.active
-                        ? '<span class="badge bg-success cursor-help" data-bs-toggle="tooltip" title="This campaign is active and can receive responses."><i class="fas fa-check-circle"></i> Active</span>'
-                        : '<span class="badge bg-danger cursor-help" data-bs-toggle="tooltip" title="This campaign is inactive and cannot receive responses."><i class="fas fa-times-circle"></i> Inactive</span>'}
+                    ? '<span class="badge bg-success cursor-help" data-bs-toggle="tooltip" title="This campaign is active and can receive responses."><i class="fas fa-check-circle"></i> Active</span>'
+                    : '<span class="badge bg-danger cursor-help" data-bs-toggle="tooltip" title="This campaign is inactive and cannot receive responses."><i class="fas fa-times-circle"></i> Inactive</span>'}
             </td>
             <td class="text-center">
                 ${campaign.multiple_answers_from_user
-                        ? '<span class="badge bg-success cursor-help" data-bs-toggle="tooltip" title="Multiple answers are allowed without verifying identity."><i class="fas fa-user-check"></i> Allowed</span>'
-                        : '<span class="badge bg-danger cursor-help" data-bs-toggle="tooltip" title="Restricts to one answer per user by verifying identity using IP."><i class="fas fa-user-shield"></i> Restricted</span>'}
+                    ? '<span class="badge bg-success cursor-help" data-bs-toggle="tooltip" title="Multiple answers are allowed without verifying identity."><i class="fas fa-user-check"></i> Allowed</span>'
+                    : '<span class="badge bg-danger cursor-help" data-bs-toggle="tooltip" title="Restricts to one answer per user by verifying identity using IP."><i class="fas fa-user-shield"></i> Restricted</span>'}
             </td>
             <td class="text-center">
-                ${campaign.max_answers 
-                    ? campaign.max_answers 
+                ${campaign.max_answers
+                    ? campaign.max_answers
                     : '<span class="badge bg-success">Unlimited</span>'}
             </td>
             <td class="text-center"><button class="btn btn-sm btn-primary" data-action="show_feedbacks" data-id="${campaign.id}"><i class="fas fa-comments fa-fw"></i> ${campaign.feedback_count}</button></td>
             <td class="text-center">
-                <button class="btn btn-sm btn-success" data-action="copy_shortcode" data-shortcode="${campaign.short_code}"><i class="fas fa-link fa-fw"></i> Link</button>
-                <button class="btn btn-sm btn-warning" data-action="edit_campaign" data-id="${campaign.id}"><i class="fas fa-edit fa-fw"></i> Edit</button>
-                <button class="btn btn-sm btn-danger" data-action="delete_campaign" data-id="${campaign.id}"><i class="fas fa-trash fa-fw"></i> Delete</button>
+                <div class="btn-group" role="group" aria-label="Campaign Actions">
+                    <button class="btn btn-sm btn-success me-1" data-action="copy_shortcode" data-shortcode="${campaign.short_code}"><i class="fas fa-link fa-fw"></i> Link</button>
+                    <button class="btn btn-sm btn-warning me-1" data-action="edit_campaign" data-id="${campaign.id}"><i class="fas fa-edit fa-fw"></i> Edit</button>
+                    <button class="btn btn-sm btn-danger" data-action="delete_campaign" data-id="${campaign.id}"><i class="fas fa-trash fa-fw"></i> Delete</button>
+                </div>
             </td>`;
-                campaignTableBody.appendChild(row);
+            campaignTableBody.appendChild(row);
 
-                const tooltipTriggerList = [].slice.call(row.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-                    new bootstrap.Tooltip(tooltipTriggerEl);
-                });
+            const tooltipTriggerList = [].slice.call(row.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
 
-                // Copy Campaign URL to clipboard
-                row.querySelector("[data-action=copy_shortcode]").addEventListener("click", (e) => {
-                    const shortCode = e.target.getAttribute("data-shortcode");
-                    const origin = window.location.href.split('/').slice(0, -1).join('/') + '/' + 'index.html';
-                    navigator.clipboard.writeText(`${origin}?s=${shortCode}`);
-                    Swal.fire({
-                        iconHtml: '<i class="fas fa-link text-success"></i>',
-                        title: 'Campaign URL Copied',
-                        text: 'The campaign URL has been copied to your clipboard.',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true
-                    });
-                });
-
-                // View Feedbacks button
-                row.querySelector("[data-action=show_feedbacks]").addEventListener("click", () => {
-                    currentCampaignId = campaign.id;
-                    showFeedbackList(campaign.id);
-                });
-
-                // Edit button
-                row.querySelector("[data-action=edit_campaign]").addEventListener("click", () => {
-                    editCampaign(campaign.id);
-                });
-
-                // Delete button
-                row.querySelector("[data-action=delete_campaign]").addEventListener("click", function () {
-                    const campaignId = campaign.id;
-                    Swal.fire({
-                        iconHtml: '<i class="fas fa-trash text-danger"></i>',
-                        title: 'Delete Campaign',
-                        html: `<b>Name: ${campaign.name}</b><br><br>This action cannot be undone!`,
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, Delete',
-                        cancelButtonText: 'Cancel',
-                        focusConfirm: false,
-                        customClass: {
-                            icon: 'no-icon',
-                            confirmButton: 'btn btn-danger mx-2',
-                            cancelButton: 'btn btn-secondary mx-2'
-                        },
-                        buttonsStyling: false
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            deleteCampaign(campaignId);
-                        }
-                    });
+            // Copy Campaign URL to clipboard
+            row.querySelector("[data-action=copy_shortcode]").addEventListener("click", (e) => {
+                const shortCode = e.target.getAttribute("data-shortcode");
+                const origin = window.location.href.split('/').slice(0, -1).join('/') + '/' + 'index.html';
+                navigator.clipboard.writeText(`${origin}?s=${shortCode}`);
+                Swal.fire({
+                    iconHtml: '<i class="fas fa-link text-success"></i>',
+                    title: 'Campaign URL Copied',
+                    text: 'The campaign URL has been copied to your clipboard.',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true
                 });
             });
+
+            // View Feedbacks button
+            row.querySelector("[data-action=show_feedbacks]").addEventListener("click", () => {
+                currentCampaignId = campaign.id;
+                showFeedbackList(campaign.id);
+            });
+
+            // Edit button
+            row.querySelector("[data-action=edit_campaign]").addEventListener("click", () => {
+                editCampaign(campaign.id);
+            });
+
+            // Delete button
+            row.querySelector("[data-action=delete_campaign]").addEventListener("click", function () {
+                const campaignId = campaign.id;
+                Swal.fire({
+                    iconHtml: '<i class="fas fa-trash text-danger"></i>',
+                    title: 'Delete Campaign',
+                    html: `<b>Name: ${campaign.name}</b><br><br>This action cannot be undone!`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Delete',
+                    cancelButtonText: 'Cancel',
+                    focusConfirm: false,
+                    customClass: {
+                        icon: 'no-icon',
+                        confirmButton: 'btn btn-danger mx-2',
+                        cancelButton: 'btn btn-secondary mx-2'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteCampaign(campaignId);
+                    }
+                });
+            });
+        });
+    }
+
+    // Create new campaign
+    createCampaignForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const bodyObj = {
+            name: document.getElementById("campaignName").value,
+            description: document.getElementById("campaignDescription").value,
+            active: document.getElementById("campaignActive").checked,
+            multiple_answers_from_user: document.getElementById("multipleAnswers").checked,
+            max_answers: document.getElementById("unlimitedAnswers").checked ? 0 : parseInt(document.getElementById("maxAnswers").value) || 0
+        };
+        await fetch(`${apiBase}/campaign`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(bodyObj)
+        });
+        createCampaignForm.reset();
+        loadCampaigns();
+        showSection(campaignListSection);
+    });
+
+    editCampaignForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        Swal.fire({
+            iconHtml: '<i class="fas fa-save text-warning"></i>',
+            title: 'Update Campaign',
+            text: 'Are you sure you want to update this campaign?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Update',
+            cancelButtonText: 'Cancel',
+            focusConfirm: false,
+            customClass: {
+                icon: 'no-icon',
+                confirmButton: 'btn btn-warning mx-2',
+                cancelButton: 'btn btn-secondary mx-2'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                editCampaignSubmit();
+            }
+        });
+    });
+
+    async function editCampaignSubmit() {
+        const campaignId = document.getElementById('editCampaignId').value;
+        const name = document.getElementById('editCampaignName').value;
+        const maxAnswers = document.getElementById('editUnlimitedAnswers').checked ? 0 : parseInt(document.getElementById('editMaxAnswers').value) || 0;
+
+        // Name validation
+        if (name.length < 3 || name.length > 255) {
+            document.getElementById('editCampaignName').classList.add('is-invalid');
+            return;
+        } else {
+            document.getElementById('editCampaignName').classList.remove('is-invalid');
         }
 
-        // Create new campaign
-        createCampaignForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const bodyObj = {
-                name: document.getElementById("campaignName").value,
-                description: document.getElementById("campaignDescription").value,
-                active: document.getElementById("campaignActive").checked,
-                multiple_answers_from_user: document.getElementById("multipleAnswers").checked,
-                max_answers: parseInt(document.getElementById("maxAnswers").value) || 0
-            };
-            await fetch(`${apiBase}/campaign`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(bodyObj)
-            });
-            createCampaignForm.reset();
-            loadCampaigns();
-            showSection(campaignListSection);
-        });
+        // Max Answers validation
+        try {
+            const res = await fetch(`${apiBase}/campaign/${campaignId}`);
+            const currentCampaign = await res.json();
 
-        editCampaignForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            Swal.fire({
-                iconHtml: '<i class="fas fa-save text-warning"></i>',
-                title: 'Update Campaign',
-                text: 'Are you sure you want to update this campaign?',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, Update',
-                cancelButtonText: 'Cancel',
-                focusConfirm: false,
-                customClass: {
-                    icon: 'no-icon',
-                    confirmButton: 'btn btn-warning mx-2',
-                    cancelButton: 'btn btn-secondary mx-2'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    editCampaignSubmit();
-                }
-            });
-        });
-
-        async function editCampaignSubmit() {
-            const campaignId = document.getElementById('editCampaignId').value;
-            const name = document.getElementById('editCampaignName').value;
-            const maxAnswers = parseInt(document.getElementById('editMaxAnswers').value) || 0;
-
-            // Name validation
-            if (name.length < 3 || name.length > 255) {
-                document.getElementById('editCampaignName').classList.add('is-invalid');
+            if (maxAnswers !== 0 && maxAnswers < currentCampaign.feedback_count) {
+                document.getElementById('editMaxAnswers').classList.add('is-invalid');
                 return;
             } else {
-                document.getElementById('editCampaignName').classList.remove('is-invalid');
+                document.getElementById('editMaxAnswers').classList.remove('is-invalid');
             }
 
-            // Max Answers validation
-            try {
-                const res = await fetch(`${apiBase}/campaign/${campaignId}`);
-                const currentCampaign = await res.json();
+            // If all validations pass, update the campaign
+            const bodyObj = {
+                name: name,
+                description: document.getElementById('editCampaignDescription').value,
+                active: document.getElementById('editCampaignActive').checked,
+                multiple_answers_from_user: document.getElementById('editMultipleAnswers').checked,
+                max_answers: maxAnswers
+            };
 
-                if (maxAnswers !== 0 && maxAnswers < currentCampaign.feedback_count) {
-                    document.getElementById('editMaxAnswers').classList.add('is-invalid');
-                    return;
-                } else {
-                    document.getElementById('editMaxAnswers').classList.remove('is-invalid');
-                }
+            const response = await fetch(`${apiBase}/campaign/${campaignId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyObj)
+            });
 
-                // If all validations pass, update the campaign
-                const bodyObj = {
-                    name: name,
-                    description: document.getElementById('editCampaignDescription').value,
-                    active: document.getElementById('editCampaignActive').checked,
-                    multiple_answers_from_user: document.getElementById('editMultipleAnswers').checked,
-                    max_answers: maxAnswers
-                };
-
-                const response = await fetch(`${apiBase}/campaign/${campaignId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bodyObj)
-                });
-
-                if (response.ok) {
-                    loadCampaigns();
-                    showSection(campaignListSection);
-                }
-            } catch (error) {
-                console.error('Error updating campaign:', error);
-                Swal.fire('Error', 'Failed to update campaign', 'error');
+            if (response.ok) {
+                loadCampaigns();
+                showSection(campaignListSection);
             }
+        } catch (error) {
+            console.error('Error updating campaign:', error);
+            Swal.fire('Error', 'Failed to update campaign', 'error');
+        }
+    }
+
+    // Show feedback list
+    async function showFeedbackList(campaignId) {
+        feedbackCards.innerHTML = "";
+        const resFeedbacks = await fetch(`${apiBase}/feedbacks?offset=0&limit=10`);
+        const feedbackData = await resFeedbacks.json();
+        const filtered = feedbackData.items.filter(f => f.campaign_id === campaignId);
+
+        if (filtered.length === 0) {
+            feedbackCards.innerHTML = "<p>No feedbacks found.</p>";
+            showSection(feedbackListSection);
+            return;
         }
 
-        // Show feedback list
-        async function showFeedbackList(campaignId) {
-            feedbackCards.innerHTML = "";
-            const resFeedbacks = await fetch(`${apiBase}/feedbacks?offset=0&limit=10`);
-            const feedbackData = await resFeedbacks.json();
-            const filtered = feedbackData.items.filter(f => f.campaign_id === campaignId);
+        const sentimentColors = {
+            positive: "text-success",
+            neutral: "text-muted",
+            negative: "text-danger"
+        };
 
-            if (filtered.length === 0) {
-                feedbackCards.innerHTML = "<p>No feedbacks found.</p>";
-                showSection(feedbackListSection);
-                return;
-            }
+        const languageNames = {
+            pt: "Portuguese",
+            en: "English",
+            es: "Spanish",
+            fr: "French",
+            de: "German"
+        };
 
-            const sentimentColors = {
-                positive: "text-success",
-                neutral: "text-muted",
-                negative: "text-danger"
-            };
-
-            const languageNames = {
-                pt: "Portuguese",
-                en: "English",
-                es: "Spanish",
-                fr: "French",
-                de: "German"
-            };
-
-            filtered.forEach(fdbk => {
-                const card = document.createElement("div");
-                card.className = "card col-md-5 offset-md-1";
-                card.innerHTML = `
+        filtered.forEach(fdbk => {
+            const card = document.createElement("div");
+            card.className = "card col-md-5 offset-md-1";
+            card.innerHTML = `
           <div class="card-body">
             <p class="card-text">${fdbk.message}</p>
             <hr>
             <button class="btn btn-sm btn-info mb-2"><i class="fas fa-chart-line"></i> Analyze</button>
             <div class="analysis-result"></div>
           </div>`;
-                feedbackCards.appendChild(card);
+            feedbackCards.appendChild(card);
 
-                const analyzeBtn = card.querySelector("button");
-                const resultDiv = card.querySelector(".analysis-result");
-                analyzeBtn.addEventListener("click", async () => {
-                    const analyzeRes = await fetch(`${apiBase}/feedback/analyze`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ feedback_id: fdbk.id })
-                    });
-                    const analyzeData = await analyzeRes.json();
-                    if (analyzeRes.status === 201 || analyzeRes.status === 200) {
-                        const sentimentClass = sentimentColors[analyzeData.sentiment_category] || "text-muted";
-                        const languageName = languageNames[analyzeData.detected_language] || analyzeData.detected_language;
+            const analyzeBtn = card.querySelector("button");
+            const resultDiv = card.querySelector(".analysis-result");
+            analyzeBtn.addEventListener("click", async () => {
+                const analyzeRes = await fetch(`${apiBase}/feedback/analyze`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ feedback_id: fdbk.id })
+                });
+                const analyzeData = await analyzeRes.json();
+                if (analyzeRes.status === 201 || analyzeRes.status === 200) {
+                    const sentimentClass = sentimentColors[analyzeData.sentiment_category] || "text-muted";
+                    const languageName = languageNames[analyzeData.detected_language] || analyzeData.detected_language;
 
-                        resultDiv.innerHTML = `
+                    resultDiv.innerHTML = `
               <hr>
               <p class="${sentimentClass} text-capitalize d-flex justify-content-between">${analyzeData.sentiment_category} <span>${'<i class="fas fa-star text-warning"></i>'.repeat(analyzeData.star_rating)}</span></p>
               <p>
@@ -653,152 +904,155 @@
               <canvas id="sentimentChart${fdbk.id}" width="400" height="200"></canvas>
             `;
 
-                        // Create a chart for sentiment analysis
-                        const ctx = document.getElementById(`sentimentChart${fdbk.id}`).getContext('2d');
-                        new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: ['Positive', 'Neutral', 'Negative'],
-                                datasets: [{
-                                    label: 'Sentiment Analysis',
-                                    data: [analyzeData.positive_score, analyzeData.neutral_score, analyzeData.negative_score],
-                                    backgroundColor: ['#28a745', '#ffc107', '#dc3545']
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
+                    // Create a chart for sentiment analysis
+                    const ctx = document.getElementById(`sentimentChart${fdbk.id}`).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Positive', 'Neutral', 'Negative'],
+                            datasets: [{
+                                label: 'Sentiment Analysis',
+                                data: [analyzeData.positive_score, analyzeData.neutral_score, analyzeData.negative_score],
+                                backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
                                 }
                             }
-                        });
-                    } else {
-                        resultDiv.innerHTML = "<p><i class='fas fa-exclamation-triangle'></i> Error analyzing feedback.</p>";
-                    }
-                });
+                        }
+                    });
+                } else {
+                    resultDiv.innerHTML = "<p><i class='fas fa-exclamation-triangle'></i> Error analyzing feedback.</p>";
+                }
             });
-            showSection(feedbackListSection);
-        }
+        });
+        showSection(feedbackListSection);
+    }
 
-        // Edit campaign
-        async function editCampaign(campaignId) {
-            try {
-                const res = await fetch(`${apiBase}/campaign/${campaignId}`);
-                const campaign = await res.json();
+    // Edit campaign
+    async function editCampaign(campaignId) {
+        try {
+            const res = await fetch(`${apiBase}/campaign/${campaignId}`);
+            const campaign = await res.json();
 
-                // Fill the form
-                document.getElementById('editCampaignId').value = campaignId;
-                document.getElementById('editCampaignName').value = campaign.name;
-                document.getElementById('editCampaignDescription').value = campaign.description;
-                document.getElementById('editCampaignActive').checked = campaign.active;
-                document.getElementById('editMultipleAnswers').checked = campaign.multiple_answers_from_user;
+            // Fill the form
+            document.getElementById('editCampaignId').value = campaignId;
+            document.getElementById('editCampaignName').value = campaign.name;
+            document.getElementById('editCampaignDescription').value = campaign.description;
+            document.getElementById('editCampaignActive').checked = campaign.active;
+            document.getElementById('editMultipleAnswers').checked = campaign.multiple_answers_from_user;
+            document.getElementById('editUnlimitedAnswers').checked = campaign.max_answers === 0;
+
+            // Set max answers input value
+            if (campaign.max_answers !== 0) {
                 document.getElementById('editMaxAnswers').value = campaign.max_answers;
-
-                // Update switchery instances
-                editSwitcheryInstances.forEach(switchery => {
-                    switchery.setPosition();
-                    switchery.handleOnchange(true);
-                });
-
-                showSection(campaignEditSection);
-            } catch (error) {
-                console.error('Error loading campaign:', error);
-            }
-        }
-
-        // Delete campaign
-        async function deleteCampaign(campaignId) {
-            await fetch(`${apiBase}/campaign/${campaignId}`, {
-                method: "DELETE"
-            });
-            loadCampaigns();
-        }
-
-        // Handle short_code in URL
-        function checkShortCode() {
-            const params = new URLSearchParams(window.location.search);
-            const sc = params.get("s");
-            if (sc) {
-                currentShortCode = sc;
-                verifyShortCode(sc);
-            }
-        }
-
-        // Verify short_code and show feedback creation
-        async function verifyShortCode(sc) {
-            // We get the campaign that matches the short_code
-            const res = await fetch(`${apiBase}/campaign/short_code/${sc}`);
-
-            if (res.ok) {
-                const data = await res.json();
-                currentCampaignId = data.id;
-                showSection(feedbackCreationSection);
             }
             else {
-                Swal.fire('Error', 'Failed to verify short code', 'error');
+                document.getElementById('editMaxAnswers').value = "";
             }
-        }
 
-        // Submit feedback
-        submitFeedbackBtn.addEventListener("click", async () => {
-            const bodyObj = {
-                campaign_id: currentCampaignId,
-                message: feedbackMessage.value
-            };
-            const res = await fetch(`${apiBase}/feedback`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(bodyObj)
+            // Update switchery instances
+            editSwitcheryInstances.forEach(switchery => {
+                switchery.setPosition();
+                switchery.handleOnchange(true);
             });
-            if (res.status === 201) {
-                feedbackMessage.value = "";
-                showSection(thankYouSection);
-            }
-        });
 
-        homeButton.addEventListener("click", () => {
-            showSection(menuSection);
-        });
+            showSection(campaignEditSection);
+        } catch (error) {
+            console.error('Error loading campaign:', error);
+        }
+    }
 
-        // Return to campaigns or back to campaigns
-        returnToCampaignsBtn.addEventListener("click", () => {
-            window.location.search = "";
-            showSection(campaignListSection);
-            loadCampaigns();
+    // Delete campaign
+    async function deleteCampaign(campaignId) {
+        await fetch(`${apiBase}/campaign/${campaignId}`, {
+            method: "DELETE"
         });
-        backToCampaignsBtn.addEventListener("click", () => {
-            showSection(campaignListSection);
-            loadCampaigns();
-        });
+        loadCampaigns();
+    }
 
-        // Menu buttons
-        viewCampaignsBtn.addEventListener("click", () => {
-            loadCampaigns();
-            showSection(campaignListSection);
-        });
-        createCampaignBtn.addEventListener("click", () => {
-            showSection(campaignCreationSection);
-        });
-        backToMenuFromList.addEventListener("click", () => {
-            showSection(menuSection);
-        });
-        backToMenuFromCreate.addEventListener("click", () => {
-            showSection(menuSection);
-        });
-        backToMenuFromEdit.addEventListener('click', () => {
-            showSection(menuSection);
-        });
+    // Handle short_code in URL
+    function checkShortCode() {
+        const params = new URLSearchParams(window.location.search);
+        const sc = params.get("s");
+        if (sc) {
+            currentShortCode = sc;
+            verifyShortCode(sc);
+        }
+    }
 
-        async function loadDashboardMetrics() {
-            try {
-                const res = await fetch(`${apiBase}/dashboard-metrics`);
+    // Verify short_code and show feedback creation
+    async function verifyShortCode(sc) {
+        // We get the campaign that matches the short_code
+        const res = await fetch(`${apiBase}/campaign/short_code/${sc}`);
 
-                if (!res.ok)
-                    document.getElementById("connectWithBackendToLoadDashboard").removeAttribute("hidden");
+        if (res.ok) {
+            const data = await res.json();
+            currentCampaignId = data.id;
+            showSection(feedbackCreationSection);
+        }
+        else {
+            Swal.fire('Error', 'Failed to verify short code', 'error');
+        }
+    }
 
-                const data = await res.json();
-                document.getElementById("dashboardMetrics").innerHTML = `
+    // Submit feedback
+    submitFeedbackBtn.addEventListener("click", async () => {
+        const bodyObj = {
+            campaign_id: currentCampaignId,
+            message: feedbackMessage.value
+        };
+        const res = await fetch(`${apiBase}/feedback`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(bodyObj)
+        });
+        if (res.status === 201) {
+            feedbackMessage.value = "";
+            showSection(thankYouSection);
+        }
+    });
+
+    // Return to campaigns or back to campaigns
+    returnToCampaignsBtn.addEventListener("click", () => {
+        window.location.search = "";
+        showSection(campaignListSection);
+        loadCampaigns();
+    });
+    backToCampaignsBtn.addEventListener("click", () => {
+        showSection(campaignListSection);
+        loadCampaigns();
+    });
+
+    // Menu buttons
+    viewCampaignsBtn.addEventListener("click", () => {
+        loadCampaigns();
+        showSection(campaignListSection);
+    });
+    backToMenuFromList.addEventListener("click", () => {
+        showSection(menuSection);
+    });
+    backToCampaignsFromCreate.addEventListener("click", () => {
+        loadCampaigns();
+        showSection(campaignListSection);
+    });
+    backToCampaignsFromEdit.addEventListener('click', () => {
+        loadCampaigns();
+        showSection(campaignListSection);
+    });
+
+    async function loadDashboardMetrics() {
+        try {
+            const res = await fetch(`${apiBase}/dashboard-metrics`);
+
+            if (!res.ok)
+                document.getElementById("connectWithBackendToLoadDashboard").removeAttribute("hidden");
+
+            const data = await res.json();
+            document.getElementById("dashboardMetrics").innerHTML = `
                 <div class="col-md-4">
                     <h6>Total Campaigns</h6>
                     <p id="totalCampaigns" class="display-6 text-primary">${data.total_campaigns || 0}</p>
@@ -812,20 +1066,21 @@
                     <p id="activeCampaigns" class="display-6 text-warning">${data.active_campaigns || 0}</p>
                 </div>
                 `;
-            } catch (error) {
-                document.getElementById("connectWithBackendToLoadDashboard").removeAttribute("hidden");
-            }
+        } catch (error) {
+            document.getElementById("connectWithBackendToLoadDashboard").removeAttribute("hidden");
         }
+    }
 
-        // On load
-        checkShortCode();
-        if (!currentShortCode) {
-            showSection(menuSection);
-        }
-    </script>
+    // On load
+    checkShortCode();
+    if (!currentShortCode) {
+        showSection(menuSection);
+        loadDashboardMetrics();
+    }
+</script>
 
-    <!-- Add SweetAlert2 JS before closing body -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Add SweetAlert2 JS before closing body -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
