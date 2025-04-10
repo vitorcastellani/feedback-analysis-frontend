@@ -470,9 +470,10 @@ analyzePendingFeedbacksOnDashboard.addEventListener("click", async () => {
 });
 
 // Show feedback list for a specific campaign
-async function showFeedbackList(campaignId) {
+async function showFeedbackList(campaignId, page = 1) {
     feedbackCards.innerHTML = "";
-    const resFeedbacks = await fetch(`${apiBase}/feedbacks?offset=0&limit=10`);
+    const offset = (page - 1) * 12;
+    const resFeedbacks = await fetch(`${apiBase}/feedbacks?offset=${offset}&limit=12`);
     const feedbackData = await resFeedbacks.json();
     const filtered = feedbackData.items.filter(f => f.campaign_id === campaignId);
 
@@ -569,6 +570,25 @@ async function showFeedbackList(campaignId) {
             }
         });
     });
+
+    // Remove existing pagination controls if present
+    const existingPaginationControls = document.querySelector(".pagination-controls");
+    if (existingPaginationControls) {
+        existingPaginationControls.remove();
+    }
+
+    // Add pagination controls
+    const paginationControls = document.createElement("div");
+    paginationControls.className = "pagination-controls mt-3";
+    paginationControls.innerHTML = `
+        <button class="btn btn-sm btn-secondary me-2" ${page === 1 ? "disabled" : ""} id="prevPage">Previous</button>
+        <button class="btn btn-sm btn-secondary" ${filtered.length < 12 ? "disabled" : ""} id="nextPage">Next</button>
+    `;
+    feedbackCards.insertAdjacentElement("afterend", paginationControls);
+
+    document.getElementById("prevPage").addEventListener("click", () => showFeedbackList(campaignId, page - 1));
+    document.getElementById("nextPage").addEventListener("click", () => showFeedbackList(campaignId, page + 1));
+
     showSection(feedbackListSection);
 }
 // Edit campaign
