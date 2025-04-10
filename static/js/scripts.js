@@ -199,35 +199,35 @@ async function loadCampaignsTable(campaigns, total) {
 
         // Copy campaign URL to clipboard
         row.querySelector("[data-action=copy_shortcode]").addEventListener("click", (e) => {
-            if (document.hasFocus()) {
-                const button = e.currentTarget; // Ensure we get the button element
-                const shortCode = button.getAttribute("data-shortcode");
-                if (shortCode) {
-                    const origin = window.location.href.split('/').slice(0, -1).join('/') + '/' + 'index.html';
-                    navigator.clipboard.writeText(`${origin}?s=${shortCode}`);
-                    Swal.fire({
-                        iconHtml: '<i class="fas fa-link text-success"></i>',
-                        title: 'Campaign URL Copied',
-                        text: 'The campaign URL has been copied to your clipboard.',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true
-                    });
-                } else {
-                    Swal.fire({
-                        iconHtml: '<i class="fas fa-exclamation-triangle text-warning"></i>',
-                        title: 'Shortcode Error',
-                        text: 'Shortcode is missing or invalid.',
-                        showConfirmButton: true
-                    });
+            const button = e.currentTarget; // Ensure we get the button element
+            const shortCode = button.getAttribute("data-shortcode");
+            if (shortCode) {
+            const origin = window.location.href.split('/').slice(0, -1).join('/') + '/' + 'index.html';
+            navigator.clipboard.writeText(`${origin}?s=${shortCode}`);
+            Swal.fire({
+                iconHtml: '<i class="fas fa-link text-success"></i>',
+                title: 'Campaign URL Copied',
+                text: 'The campaign URL has been copied to your clipboard.',
+                showCancelButton: true,
+                confirmButtonText: 'Go to Campaign',
+                cancelButtonText: 'Back',
+                customClass: {
+                confirmButton: 'btn btn-primary mx-2',
+                cancelButton: 'btn btn-secondary mx-2'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                verifyShortCode(shortCode);
                 }
+            });
             } else {
-                Swal.fire({
-                    iconHtml: '<i class="fas fa-exclamation-triangle text-warning"></i>',
-                    title: 'Clipboard Error',
-                    text: 'Please ensure the document is focused before copying.',
-                    showConfirmButton: true
-                });
+            Swal.fire({
+                iconHtml: '<i class="fas fa-exclamation-triangle text-warning"></i>',
+                title: 'Shortcode Error',
+                text: 'Shortcode is missing or invalid.',
+                showConfirmButton: true
+            });
             }
         });
 
@@ -1425,5 +1425,4 @@ async function loadDashboardMetrics() {
 checkShortCode();
 if (!currentShortCode) {
     showSection(menuSection);
-    loadDashboardMetrics();
 }
