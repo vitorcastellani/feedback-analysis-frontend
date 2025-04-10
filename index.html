@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Menu — WAVE</title>
+    <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+    <!-- Bootstrap CSS for basic styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Switchery CSS for switch styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <!-- Chart.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.css">
+    <!-- Custom CSS for additional styling -->
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+
+<body class="container-fluid px-5 py-3">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Unified Menu Section -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-primary" href="#" onclick="showSection(menuSection)">
+                    <img src="static/images/wave-logo-512x512-transp.png"
+                        alt="Web-based Analysis and Visualization Engine" class="me-2" style="height: 100px;">
+                    <span style="font-family: 'Pacifico', cursive; color: #3197c6;">W</span>
+                    <span style="font-family: 'Pacifico', cursive; color: #37a987;">A</span>
+                    <span style="font-family: 'Pacifico', cursive; color: #f7a218;">V</span>
+                    <span style="font-family: 'Pacifico', cursive; color: #fc6d2c;">E</span>
+                </a>
+                <hr class="d-none d-lg-block mx-3" style="border: 1px solid #a5a5a5; height: 50px;"> <!-- Separador -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <hr class="w-100 my-2 d-lg-none"> <!-- Separador antes do menu em telas pequenas -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark fw-semibold hover-highlight" href="#"
+                                id="dashboardMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-chart-pie me-2"></i>Dashboards
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dashboardMenu">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="#"
+                                        onclick="loadDashboards(); showSection(dashboardListSection);">
+                                        <i class="fas fa-eye me-2"></i><span class="d-none d-md-inline">View</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="#"
+                                        onclick="addNewDashboardBtn.click()">
+                                        <i class="fas fa-plus me-2"></i><span class="d-none d-md-inline">Create</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark fw-semibold hover-highlight" href="#"
+                                id="campaignsMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bullhorn me-2"></i>Campaigns
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="campaignsMenu">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="#"
+                                        onclick="loadCampaigns(); showSection(campaignListSection);">
+                                        <i class="fas fa-eye me-2"></i><span class="d-none d-md-inline">View</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="#"
+                                        onclick="showSection(campaignCreationSection)">
+                                        <i class="fas fa-plus me-2"></i><span class="d-none d-md-inline">Create</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Section -->
+        <div id="menuSection" data-title="Menu">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Overview</h5>
+                            <div id="dashboardMetrics" class="row text-center">
+                                <div id="connectWithBackendToLoadDashboard" class="col-md-12" hidden>
+                                    <p class="text-danger">Please connect to the backend service to load dashboard data.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card clickable-card cursor-pointer" id="manageDashboardsBtn">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-pie fa-3x text-info"></i>
+                            </div>
+                            <h5 class="card-title">Manage Dashboards</h5>
+                            <p class="card-text">Browse and analyze your custom dashboards.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card clickable-card cursor-pointer" id="viewCampaignsBtn">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-bullhorn fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Manage Campaigns</h5>
+                            <p class="card-text">Browse and manage your campaigns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign List Section -->
+        <div id="campaignListSection" data-title="Campaigns" class="hidden col-xl-10 offset-xl-1 col-lg-12 col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-center">
+                        <i class="fas fa-list-alt fa-3x text-primary"></i>
+                    </div>
+                    <h2 class="mb-5 text-center">Campaigns</h2>
+                    <div class="d-flex justify-content-end mb-3">
+                        <button id="addNewCampaignBtn" class="btn btn-primary d-flex align-items-center"
+                            onclick="showSection(campaignCreationSection)">
+                            <i class="fas fa-plus me-2"></i> Add New Campaign
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="campaignTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th class="text-center">
+                                        Status
+                                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Active campaigns can receive feedback. Inactive campaigns are not accepting responses."></i>
+                                    </th>
+                                    <th class="text-center">
+                                        Multi-Answers
+                                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Allows multiple answers from the same user. If disabled, only one response per IP is accepted."></i>
+                                    </th>
+                                    <th class="text-center">
+                                        Max Answers
+                                        <i class="fas fa-info-circle text-muted cursor-help" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="When the maximum number of responses is reached, the campaign will no longer accept new feedbacks."></i>
+                                    </th>
+                                    <th class="text-center">Feedbacks</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button id="backToMenuFromList" class="btn btn-secondary d-flex align-items-center">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Menu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Creation Section -->
+        <div id="campaignCreationSection" data-title="Create Campaign"
+            class="hidden col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-center">
+                        <i class="fas fa-plus-circle fa-3x text-success"></i>
+                    </div>
+                    <h2 class="mb-5 text-center">Campaign</h2>
+                    <form id="createCampaignForm" class="row g-3">
+                        <div class="row mb-3">
+                            <label for="campaignName" class="form-label">
+                                <i class="fas fa-tag fa-fw text-muted"></i> Campaign Name
+                            </label>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="campaignName"
+                                    placeholder="The name of the campaign" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="campaignDescription" class="form-label">
+                                <i class="fas fa-info-circle fa-fw text-muted"></i> Campaign Description
+                            </label>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="campaignDescription"
+                                    placeholder="A brief description of the campaign">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12 d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input switchery" id="campaignActive" checked>
+                                <span class="m-1">Active</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12 d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input switchery" id="multipleAnswers">
+                                <span class="m-1">Allow multiple answers</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="maxAnswers" class="form-label">
+                                <i class="fas fa-clipboard-list fa-fw text-muted"></i> Max Answers
+                            </label>
+                            <div class="col-md-12 d-flex align-items-center">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="maxAnswers"
+                                        placeholder="Limit responses" data-original-placeholder="Limit responses"
+                                        min="1">
+                                    <span class="input-group-text">
+                                        <label class="form-check-label d-flex align-items-center mb-0">
+                                            <input type="checkbox" class="form-check-input switchery me-2"
+                                                id="unlimitedAnswers">
+                                            <span class="text-muted m-1">Unlimited</span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                <button type="button" id="backToCampaignsFromCreate"
+                                    class="btn btn-secondary d-flex align-items-center">
+                                    <i class="fas fa-arrow-left me-2"></i> Back to Campaigns
+                                </button>
+                                <button type="submit" class="btn btn-primary d-flex align-items-center">
+                                    <i class="fas fa-save me-2"></i> Create Campaign
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Edit Section -->
+        <div id="campaignEditSection" data-title="Edit Campaign"
+            class="hidden col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-center">
+                        <i class="fas fa-edit fa-3x text-warning"></i>
+                    </div>
+                    <h2 class="mb-5 text-center">Campaign</h2>
+                    <form id="editCampaignForm" class="row g-3">
+                        <input type="hidden" id="editCampaignId">
+                        <div class="row mb-3">
+                            <label for="editCampaignName" class="form-label">
+                                <i class="fas fa-tag fa-fw text-muted"></i> Campaign Name
+                            </label>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="editCampaignName"
+                                    placeholder="Campaign Name" required>
+                                <div class="invalid-feedback">Campaign name must be between 3 and 255 characters</div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="editCampaignDescription" class="form-label">
+                                <i class="fas fa-info-circle fa-fw text-muted"></i> Campaign Description
+                            </label>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="editCampaignDescription"
+                                    placeholder="Campaign Description">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12 d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input switchery" id="editCampaignActive">
+                                <span class="m-1">Active</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12 d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input switchery" id="editMultipleAnswers">
+                                <span class="m-1">Allow multiple answers</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="editMaxAnswers" class="form-label">
+                                <i class="fas fa-clipboard-list fa-fw text-muted"></i> Max Answers
+                            </label>
+                            <div class="col-md-12 d-flex align-items-center">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="editMaxAnswers"
+                                        placeholder="Limit responses" data-original-placeholder="Limit responses"
+                                        min="1">
+                                    <span class="input-group-text">
+                                        <label class="form-check-label d-flex align-items-center mb-0">
+                                            <input type="checkbox" class="form-check-input switchery me-2"
+                                                id="editUnlimitedAnswers">
+                                            <span class="text-muted m-1">Unlimited</span>
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="invalid-feedback">Max answers cannot be less than current feedback count
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                <button type="button" id="backToCampaignsFromEdit"
+                                    class="btn btn-secondary d-flex align-items-center">
+                                    <i class="fas fa-arrow-left me-2"></i> Back to Menu
+                                </button>
+                                <button type="submit" class="btn btn-warning d-flex align-items-center">
+                                    <i class="fas fa-save me-2"></i> Update Campaign
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Dashboards Section -->
+        <div id="dashboardListSection" data-title="Dashboards" class="hidden col-xl-10 offset-xl-1 col-lg-12 col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-center">
+                        <i class="fas fa-chart-pie fa-3x text-info"></i>
+                    </div>
+                    <h2 class="mb-5 text-center">Dashboards</h2>
+                    <div class="d-flex justify-content-end mb-3">
+                        <button id="addNewDashboardBtn" class="btn btn-primary d-flex align-items-center">
+                            <i class="fas fa-plus me-2"></i> Add New Dashboard
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="dashboardTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button id="backToMenuFromDashboards" class="btn btn-secondary d-flex align-items-center">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Menu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add New Dashboard Section -->
+        <div id="dashboardCreationSection" data-title="Create Dashboard" class="hidden">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-center">
+                        <i class="fas fa-plus-circle fa-3x text-success"></i>
+                    </div>
+                    <h2 class="mb-5 text-center">Dashboard</h2>
+                    <form id="addDashboardForm" class="row g-3">
+                        <div class="mb-3">
+                            <label for="newDashboardName" class="form-label">Dashboard Name</label>
+                            <input type="text" id="newDashboardName" class="form-control"
+                                placeholder="Enter dashboard name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newDashboardDescription" class="form-label">Dashboard Description</label>
+                            <textarea id="newDashboardDescription" class="form-control" rows="3"
+                                placeholder="Enter dashboard description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newDashboardCampaignIds" class="form-label">Select Campaigns</label>
+                            <select id="newDashboardCampaignIds" class="form-select" multiple></select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newDashboardComponents" class="form-label">Components</label>
+                            <div id="componentsContainer">
+                            </div>
+                            <button type="button" id="addComponentBtn" class="btn btn-sm btn-success mt-2">
+                                <i class="fas fa-plus"></i> Add Component
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="button" id="cancelAddDashboard"
+                                class="btn btn-secondary d-flex align-items-center">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Dashboards
+                            </button>
+                            <button type="submit" class="btn btn-primary d-flex align-items-center">
+                                <i class="fas fa-save me-2"></i> Create Dashboard
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Dashboard Section -->
+        <div id="dashboardEditSection" data-title="Edit Dashboard" class="hidden">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3 text-center">
+                        <i class="fas fa-edit fa-3x text-warning"></i>
+                    </div>
+                    <h2 class="mb-5 text-center">Dashboard</h2>
+                    <form id="editDashboardForm" class="row g-3">
+                        <input type="hidden" id="editDashboardId">
+                        <div class="mb-3">
+                            <label for="editDashboardName" class="form-label">Dashboard Name</label>
+                            <input type="text" id="editDashboardName" class="form-control"
+                                placeholder="Enter dashboard name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDashboardDescription" class="form-label">Dashboard Description</label>
+                            <textarea id="editDashboardDescription" class="form-control" rows="3"
+                                placeholder="Enter dashboard description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDashboardCampaignIds" class="form-label">Select Campaigns</label>
+                            <select id="editDashboardCampaignIds" class="form-select" multiple></select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDashboardComponents" class="form-label">Components</label>
+                            <div id="editComponentsContainer">
+                            </div>
+                            <button type="button" id="addEditComponentBtn" class="btn btn-sm btn-success mt-2">
+                                <i class="fas fa-plus"></i> Add Component
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="button" id="cancelEditDashboard"
+                                class="btn btn-secondary d-flex align-items-center">
+                                <i class="fas fa-arrow-left me-2"></i> Cancel
+                            </button>
+                            <button type="submit" class="btn btn-warning d-flex align-items-center">
+                                <i class="fas fa-save me-2"></i> Update Dashboard
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rendered Dashboards Section -->
+        <div id="renderDashboardsSection" data-title="Dashboard" class="hidden col-12">
+            <h2 class="text-center text-primary">Dashboard</h2>
+            <div class="d-flex justify-content-end mb-3">
+                <button id="analyzePendingFeedbacksOnDashboard" class="btn btn-primary">Analyze Pending
+                    Feedbacks</button>
+            </div>
+            <div id="renderedDashboards" class="row"></div>
+            <input type="hidden" id="renderedDashboardId">
+            <input type="hidden" id="renderedDashboardCampaignIds">
+        </div>
+
+        <!-- Feedback Creation Section -->
+        <div id="feedbackCreationSection" data-title="Submit Feedback"
+            class="hidden col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+            <div class="card shadow-sm p-3 mb-3">
+                <h3 id="campaignTitle" class="text-primary fw-bold"></h3>
+                <p id="campaignDescription" class="text-muted mb-3"></p>
+                <textarea id="feedbackMessage" class="form-control" rows="5"
+                    placeholder="Your feedback here..."></textarea>
+                <button id="submitFeedbackBtn" class="btn btn-success mt-3">Submit Feedback</button>
+            </div>
+        </div>
+
+        <!-- Thank You Section -->
+        <div id="thankYouSection" data-title="Thank You" class="hidden d-flex flex-column text-center vh-100">
+            <div class="card shadow-sm p-4">
+                <div class="card-body">
+                    <h2 class="text-success fw-bold mb-3">Thank You!</h2>
+                    <p class="text-muted mb-4">Your feedback has been successfully submitted.</p>
+                    <button id="returnToCampaigns" class="btn btn-primary d-flex align-items-center">
+                        <i class="fas fa-arrow-left me-2"></i> Return to Campaigns
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback List Section -->
+        <div id="feedbackListSection" data-title="Feedbacks" class="hidden">
+            <h2>Feedbacks</h2>
+            <button id="analyzePendingFeedbacksOnFeedbacks" class="btn btn-primary mt-3 mb-3">Analyze All
+                Feedbacks</button>
+            <div id="feedbackCards" class="row row-cols-1 row-cols-md-3 g-4"></div>
+            <button id="backToCampaigns" class="btn btn-secondary mt-3">Back to Campaigns</button>
+        </div>
+    </div>
+
+    <footer class="text-center py-3 shadow-sm" style="background-color: #f8f9fa; color: #6c757d;">
+        <p class="mb-0">
+            Developed by
+            <a href="https://github.com/vitorcastellani" target="_blank"
+                class="text-primary text-decoration-none fw-bold">
+                Vitor Castellani <i class="fab fa-github"></i>
+            </a> |
+            <a href="https://www.linkedin.com/in/vitorcastellani/" target="_blank"
+                class="text-primary text-decoration-none fw-bold">
+                LinkedIn <i class="fab fa-linkedin"></i>
+            </a>
+        </p>
+        <p class="mb-0">
+            This project is the MVP of the "Full Stack Basic Development" sprint in the Software Engineering
+            postgraduate program at PUC-Rio.
+        </p>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Switchery JS for switch styling -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <!-- Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <!-- Add SweetAlert2 JS before closing body -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- D3.js for word cloud generation -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <!-- D3 Cloud for word cloud generation -->
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
+    <!-- ApexCharts for advanced charts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- Custom JS for the application -->
+    <script src="static/js/scripts.js"></script>
+</body>
+
+</html>
