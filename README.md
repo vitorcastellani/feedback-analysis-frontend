@@ -1,6 +1,6 @@
 # WAVE - Web-based Analysis and Visualization Engine
 
-<img src="static/images/wave-logo.webp" alt="WAVE Logo" width="100">
+<img src="static/images/wave-project.png" alt="Web-based Analysis and Visualization Engine" width="100">
 
 ## Overview
 
